@@ -117,6 +117,9 @@ static const void *LabelKey = &LabelKey;
     }
     [rs close];
     
+    
+    
+    
     // Mark:合并站点
     AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSMutableDictionary *sameIdStationMap = delegate.sameIdStationMap;
