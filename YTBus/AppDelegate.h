@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "BMapKit.h"
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,BMKGeneralDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-//@property (strong, nonatomic) BMKMapManager *mapManager;
+@property (strong, nonatomic) BMKMapManager *mapManager;
 
 //@property (nonatomic, strong) BMKUserLocation *userLocation;
 @property (assign, nonatomic) int realtimeRequestCount;

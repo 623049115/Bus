@@ -7,7 +7,6 @@
 //
 
 #import "JDOStationMapController.h"
-//#import "BMapKit.h"
 #import "JDODatabase.h"
 #import "JDOStationModel.h"
 #import "JDOBusLine.h"
@@ -56,9 +55,9 @@ static const void *LabelKey = &LabelKey;
 
 @end
 
-@interface JDOStationMapController () <UITableViewDataSource,UITableViewDelegate>
+@interface JDOStationMapController () <UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,BMKMapViewDelegate>
 
-//@property (nonatomic,assign) IBOutlet BMKMapView *mapView;
+@property (nonatomic,assign) IBOutlet BMKMapView *mapView;
 @property (nonatomic,assign) IBOutlet UITableView *tableView;
 @property (nonatomic,assign) IBOutlet UIView *lineView;
 @property (nonatomic,assign) IBOutlet UILabel *stationLabel;
@@ -77,6 +76,14 @@ static const void *LabelKey = &LabelKey;
     NSMutableArray *combinedStations;
 }
 
+#pragma mark - life cycle
+
+- (void)dealloc {
+    if (_mapView) {
+        _mapView = nil;
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -93,8 +100,84 @@ static const void *LabelKey = &LabelKey;
     [self.busMonitor addTarget:self action:@selector(switchMonitor) forControlEvents:UIControlEventValueChanged];
     rightBtnIsSearch = true;
     
+    [self addCustomGestures];
+    
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self.mapView viewWillAppear];
+    self.mapView.delegate = self;
+    
+    if (self.selectedStation) {
+        [self showLineView];
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [self.mapView viewWillDisappear];
+    self.mapView.delegate = nil;
+    
+}
+
+#pragma mark - BMKMapViewDelegate
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"BMKMapView控件初始化完成" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
+//    [alert show];
+//    alert = nil;
+}
+
+- (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
+    NSLog(@"map view: click blank");
+}
+
+- (void)mapview:(BMKMapView *)mapView onDoubleClick:(CLLocationCoordinate2D)coordinate {
+    NSLog(@"map view: double click");
+}
+
+#pragma mark - 添加自定义的手势（若不自定义手势，不需要下面的代码）
+
+- (void)addCustomGestures {
+    /*
+     *注意：
+     *添加自定义手势时，必须设置UIGestureRecognizer的属性cancelsTouchesInView 和 delaysTouchesEnded 为NO,
+     *否则影响地图内部的手势处理
+     */
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    doubleTap.delegate = self;
+    doubleTap.numberOfTapsRequired = 2;
+    doubleTap.cancelsTouchesInView = NO;
+    doubleTap.delaysTouchesEnded = NO;
+    
+    [self.view addGestureRecognizer:doubleTap];
+    
+    /*
+     *注意：
+     *添加自定义手势时，必须设置UIGestureRecognizer的属性cancelsTouchesInView 和 delaysTouchesEnded 为NO,
+     *否则影响地图内部的手势处理
+     */
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    singleTap.delegate = self;
+    singleTap.cancelsTouchesInView = NO;
+    singleTap.delaysTouchesEnded = NO;
+    [singleTap requireGestureRecognizerToFail:doubleTap];
+    [self.view addGestureRecognizer:singleTap];
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)theSingleTap {
+    /*
+     *do something
+     */
+    NSLog(@"my handleSingleTap");
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)theDoubleTap {
+    /*
+     *do something
+     */
+    NSLog(@"my handleDoubleTap");
+}
+
+#pragma mark- private
 - (void) searchOrClear:(id)sender {
     if (rightBtnIsSearch) {
         self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"地图-清除"];
@@ -144,26 +227,6 @@ static const void *LabelKey = &LabelKey;
     [_stations removeAllObjects];
     [combinedStations removeAllObjects];
 }
-
--(void)viewWillAppear:(BOOL)animated {
-    [MobClick beginLogPageView:@"sitesmap"];
-    [MobClick event:@"sitesmap"];
-    [MobClick beginEvent:@"sitesmap"];
-//    
-//    _mapView.delegate = self;
-//    [_mapView viewWillAppear];
-    
-    if (self.selectedStation) {
-        [self showLineView];
-    }
-}
-
--(void)viewWillDisappear:(BOOL)animated {
-    [MobClick endLogPageView:@"sitesmap"];
-    [MobClick endEvent:@"sitesmap"];
-    
-}
-
 
 - (void)addBounceAnnimationToView:(UIView *)view
 {

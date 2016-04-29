@@ -247,7 +247,7 @@
                                     <outlet property="delegate" destination="bv1-Fz-J5H" id="OGH-eI-NCi"/>
                                 </connections>
                             </navigationBar>
-                            <view contentMode="scaleToFill" id="fBR-hK-dbK">
+                            <view contentMode="scaleToFill" id="fBR-hK-dbK" customClass="BMKMapView">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -260,6 +260,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="mapView" destination="fBR-hK-dbK" id="Sss-Rd-81g"/>
                         <outlet property="navigationBar" destination="Vf3-Mf-Ee7" id="Xln-bD-XKi"/>
                     </connections>
                 </viewController>
@@ -1242,7 +1243,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="3qo-MX-41I">
+                            <view contentMode="scaleToFill" id="3qo-MX-41I" customClass="BMKMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1330,6 +1331,7 @@
                     <connections>
                         <outlet property="closeBtn" destination="2O9-Kv-1ym" id="zIV-pa-Dff"/>
                         <outlet property="lineView" destination="UfY-rk-sOq" id="Sgg-p8-hZ0"/>
+                        <outlet property="mapView" destination="3qo-MX-41I" id="z9Q-DL-hb6"/>
                         <outlet property="stationLabel" destination="oQi-FC-YNG" id="KAR-EE-Wgq"/>
                         <outlet property="tableView" destination="UNV-HD-lxq" id="u1j-jP-BFN"/>
                     </connections>

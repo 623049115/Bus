@@ -7,13 +7,12 @@
 //
 
 #import "JDOLocationMapController.h"
-//#import "BMapKit.h"
 #import "AppDelegate.h"
 #import "CMPopTipView.h"
 #import "JDOInterChangeController.h"
 #import "JDOConstants.h"
 
-@interface JDOLocationMapController () <UINavigationBarDelegate>{
+@interface JDOLocationMapController () <UINavigationBarDelegate,BMKMapViewDelegate>{
 //    BMKLocationService *_locService;
 //    BMKGeoCodeSearch *_searcher;
     UIImageView *marker;
@@ -21,12 +20,13 @@
 //    BMKPoiInfo *poi;
 }
 
-//@property (nonatomic,assign) IBOutlet BMKMapView *mapView;
+@property (weak, nonatomic) IBOutlet BMKMapView *mapView;
 
 @end
 
 @implementation JDOLocationMapController
 
+#pragma mark - life cycle
 // storyboard中添加navigationbar无法调整高度(44)，方案1：手动调整frame，方案2：设置delegate实现positionForBar
 - (UIBarPosition)positionForBar:(id <UIBarPositioning>)bar{
     return UIBarPositionTopAttached;
@@ -70,9 +70,9 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-//    _mapView.delegate = self;
-//    [_mapView viewWillAppear];
-//    
+    _mapView.delegate = self;
+    [_mapView viewWillAppear];
+//
 ////    _searcher.delegate = self;
 //    _locService.delegate = self;
 //    [_locService startUserLocationService];
@@ -85,9 +85,9 @@
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
-//    [_mapView viewWillDisappear];
-//    _mapView.delegate = nil;
-//    
+    [_mapView viewWillDisappear];
+    _mapView.delegate = nil;
+//
 //    [_locService stopUserLocationService];
 //    _locService.delegate = nil;
 //    _searcher.delegate = nil;
@@ -97,7 +97,22 @@
 //- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation{
 ////    [_mapView updateLocationData:userLocation];
 //}
+#pragma mark - BMKMapViewDelegate
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"BMKMapView控件初始化完成" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
+//    [alert show];
+//    alert = nil;
+}
 
+- (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
+    NSLog(@"map view: click blank");
+}
+
+- (void)mapview:(BMKMapView *)mapView onDoubleClick:(CLLocationCoordinate2D)coordinate {
+    NSLog(@"map view: double click");
+}
+
+#pragma mark - private
 - (IBAction)close:(id)sender{
     [self.presentingViewController dismissViewControllerAnimated:true completion:^{
         
