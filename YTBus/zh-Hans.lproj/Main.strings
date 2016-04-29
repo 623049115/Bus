@@ -1,0 +1,279 @@
+
+/* Class = "IBUILabel"; text = "车辆到达前"; ObjectID = "24o-cV-7Cj"; */
+"24o-cV-7Cj.text" = "车辆到达前";
+
+/* Class = "IBUITabBarController"; title = "主界面"; ObjectID = "49e-Tb-3d3"; */
+"49e-Tb-3d3.title" = "主界面";
+
+/* Class = "IBUILabel"; text = "站推送提醒"; ObjectID = "4Nb-tt-jZ4"; */
+"4Nb-tt-jZ4.text" = "站推送提醒";
+
+/* Class = "IBUILabel"; text = "最新资讯"; ObjectID = "56F-qc-V3k"; */
+"56F-qc-V3k.text" = "最新资讯";
+
+/* Class = "IBUIViewController"; title = "站点地图"; ObjectID = "5js-5E-5MP"; */
+"5js-5E-5MP.title" = "站点地图";
+
+/* Class = "IBUILabel"; text = "烟台人力市场——宫家岛"; ObjectID = "5sm-8K-Ce5"; */
+"5sm-8K-Ce5.text" = "烟台人力市场——宫家岛";
+
+/* Class = "IBUINavigationItem"; title = "更多内容"; ObjectID = "6E7-HP-wKt"; */
+"6E7-HP-wKt.title" = "更多内容";
+
+/* Class = "IBUISegmentedControl"; 6a4-mz-pXE.segmentTitles[0] = "500"; ObjectID = "6a4-mz-pXE"; */
+"6a4-mz-pXE.segmentTitles[0]" = "500";
+
+/* Class = "IBUISegmentedControl"; 6a4-mz-pXE.segmentTitles[1] = "1000"; ObjectID = "6a4-mz-pXE"; */
+"6a4-mz-pXE.segmentTitles[1]" = "1000";
+
+/* Class = "IBUISegmentedControl"; 6a4-mz-pXE.segmentTitles[2] = "2000"; ObjectID = "6a4-mz-pXE"; */
+"6a4-mz-pXE.segmentTitles[2]" = "2000";
+
+/* Class = "IBUISegmentedControl"; 6a4-mz-pXE.segmentTitles[3] = "3000"; ObjectID = "6a4-mz-pXE"; */
+"6a4-mz-pXE.segmentTitles[3]" = "3000";
+
+/* Class = "IBUIViewController"; title = "附近"; ObjectID = "9Fk-el-vtG"; */
+"9Fk-el-vtG.title" = "附近";
+
+/* Class = "IBUILabel"; text = "线路名称线路名称线路名称"; ObjectID = "AJT-gT-9T2"; */
+"AJT-gT-9T2.text" = "线路名称线路名称线路名称";
+
+/* Class = "IBUILabel"; text = "2.0元"; ObjectID = "AmD-Za-qbS"; */
+"AmD-Za-qbS.text" = "2.0元";
+
+/* Class = "IBUILabel"; text = "10条线路通过"; ObjectID = "AsT-J9-jog"; */
+"AsT-J9-jog.text" = "10条线路通过";
+
+/* Class = "IBUIBarButtonItem"; title = "站点"; ObjectID = "B8m-Fg-rcr"; */
+"B8m-Fg-rcr.title" = "站点";
+
+/* Class = "IBUILabel"; text = "站点名称"; ObjectID = "D6N-AU-e3z"; */
+"D6N-AU-e3z.text" = "站点名称";
+
+/* Class = "IBUIButton"; normalTitle = "查询"; ObjectID = "E3g-di-THu"; */
+"E3g-di-THu.normalTitle" = "查询";
+
+/* Class = "IBUINavigationItem"; title = "我的附近"; ObjectID = "Eg5-sn-XsT"; */
+"Eg5-sn-XsT.title" = "我的附近";
+
+/* Class = "IBUILabel"; text = "507路"; ObjectID = "Evo-fc-xyn"; */
+"Evo-fc-xyn.text" = "507路";
+
+/* Class = "IBUIButton"; normalTitle = "少步行"; ObjectID = "HEM-Fn-Aes"; */
+"HEM-Fn-Aes.normalTitle" = "少步行";
+
+/* Class = "IBUILabel"; text = "世纪名都——体育公园"; ObjectID = "HFj-9M-JC5"; */
+"HFj-9M-JC5.text" = "世纪名都——体育公园";
+
+/* Class = "IBUILabel"; text = "常见问题"; ObjectID = "Hf7-bK-Clt"; */
+"Hf7-bK-Clt.text" = "常见问题";
+
+/* Class = "IBUINavigationItem"; title = "站点查询"; ObjectID = "Kwn-gT-OSo"; */
+"Kwn-gT-OSo.title" = "站点查询";
+
+/* Class = "IBUINavigationItem"; title = "线路查询"; ObjectID = "L0y-dG-ejy"; */
+"L0y-dG-ejy.title" = "线路查询";
+
+/* Class = "IBUILabel"; text = "检查更新"; ObjectID = "N6f-v0-k14"; */
+"N6f-v0-k14.text" = "检查更新";
+
+/* Class = "IBUILabel"; text = "19路"; ObjectID = "Nhe-ZF-wvd"; */
+"Nhe-ZF-wvd.text" = "19路";
+
+/* Class = "IBUILabel"; text = "附近半径(米)"; ObjectID = "O61-fo-8DA"; */
+"O61-fo-8DA.text" = "附近半径(米)";
+
+/* Class = "IBUITableViewController"; title = "站点"; ObjectID = "OeW-2e-V8G"; */
+"OeW-2e-V8G.title" = "站点";
+
+/* Class = "IBUINavigationItem"; title = "资讯详情"; ObjectID = "Ovr-Gm-fXG"; */
+"Ovr-Gm-fXG.title" = "资讯详情";
+
+/* Class = "IBUINavigationItem"; title = "系统设置"; ObjectID = "Pbd-86-WbO"; */
+"Pbd-86-WbO.title" = "系统设置";
+
+/* Class = "IBUILabel"; text = "附近站点刷新位移(米)"; ObjectID = "Pf4-Ov-ks6"; */
+"Pf4-Ov-ks6.text" = "附近站点刷新位移(米)";
+
+/* Class = "IBUIBarButtonItem"; title = "返回"; ObjectID = "RO4-vq-fdY"; */
+"RO4-vq-fdY.title" = "返回";
+
+/* Class = "IBUILabel"; text = "2"; ObjectID = "Rhi-b4-5ii"; */
+"Rhi-b4-5ii.text" = "2";
+
+/* Class = "IBUILabel"; text = "关于我们"; ObjectID = "Rxw-MG-dJN"; */
+"Rxw-MG-dJN.text" = "关于我们";
+
+/* Class = "IBUILabel"; text = "宫家岛-体育公园"; ObjectID = "UMh-sn-4bc"; */
+"UMh-sn-4bc.text" = "宫家岛-体育公园";
+
+/* Class = "IBUILabel"; text = "3"; ObjectID = "Wqa-sB-u4a"; */
+"Wqa-sB-u4a.text" = "3";
+
+/* Class = "IBUIButton"; normalTitle = "换向"; ObjectID = "YMa-HW-boK"; */
+"YMa-HW-boK.normalTitle" = "换向";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "ZTV-av-4WY"; */
+"ZTV-av-4WY.text" = "Label";
+
+/* Class = "IBUIBarButtonItem"; title = "站点"; ObjectID = "ZWL-Ol-2Bq"; */
+"ZWL-Ol-2Bq.title" = "站点";
+
+/* Class = "IBUITabBarItem"; title = "线路"; ObjectID = "a96-PW-c8R"; */
+"a96-PW-c8R.title" = "线路";
+
+/* Class = "IBUILabel"; text = "Subtitle"; ObjectID = "aej-om-oZv"; */
+"aej-om-oZv.text" = "Subtitle";
+
+/* Class = "IBUILabel"; text = "广播电视台广播电视台"; ObjectID = "b0i-bR-Rga"; */
+"b0i-bR-Rga.text" = "广播电视台广播电视台";
+
+/* Class = "IBUIViewController"; title = "地图"; ObjectID = "bBZ-w8-kZ8"; */
+"bBZ-w8-kZ8.title" = "地图";
+
+/* Class = "IBUIViewController"; title = "换乘定位"; ObjectID = "bv1-Fz-J5H"; */
+"bv1-Fz-J5H.title" = "换乘定位";
+
+/* Class = "IBUITableViewController"; title = "附近"; ObjectID = "c87-bU-CWv"; */
+"c87-bU-CWv.title" = "附近";
+
+/* Class = "IBUILabel"; text = "2999米"; ObjectID = "cMN-oe-8sJ"; */
+"cMN-oe-8sJ.text" = "2999米";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "dBM-dB-lFz"; */
+"dBM-dB-lFz.text" = "Title";
+
+/* Class = "IBUILabel"; text = "描述信息"; ObjectID = "dCe-bU-WsG"; */
+"dCe-bU-WsG.text" = "描述信息";
+
+/* Class = "IBUILabel"; text = "我的位置"; ObjectID = "dRB-Y0-pMq"; */
+"dRB-Y0-pMq.text" = "我的位置";
+
+/* Class = "IBUISegmentedControl"; e4H-Bq-2cx.segmentTitles[0] = "10"; ObjectID = "e4H-Bq-2cx"; */
+"e4H-Bq-2cx.segmentTitles[0]" = "10";
+
+/* Class = "IBUISegmentedControl"; e4H-Bq-2cx.segmentTitles[1] = "30"; ObjectID = "e4H-Bq-2cx"; */
+"e4H-Bq-2cx.segmentTitles[1]" = "30";
+
+/* Class = "IBUISegmentedControl"; e4H-Bq-2cx.segmentTitles[2] = "60"; ObjectID = "e4H-Bq-2cx"; */
+"e4H-Bq-2cx.segmentTitles[2]" = "60";
+
+/* Class = "IBUIBarButtonItem"; title = "确定"; ObjectID = "eUc-rF-Gb2"; */
+"eUc-rF-Gb2.title" = "确定";
+
+/* Class = "IBUITabBarItem"; title = "附近"; ObjectID = "err-Fg-HWc"; */
+"err-Fg-HWc.title" = "附近";
+
+/* Class = "IBUILabel"; text = "18:00"; ObjectID = "evm-n0-7X5"; */
+"evm-n0-7X5.text" = "18:00";
+
+/* Class = "IBUITabBarItem"; title = "更多"; ObjectID = "f59-4z-mLJ"; */
+"f59-4z-mLJ.title" = "更多";
+
+/* Class = "IBUIBarButtonItem"; title = "换乘"; ObjectID = "fCb-cT-9Bf"; */
+"fCb-cT-9Bf.title" = "换乘";
+
+/* Class = "IBUILabel"; text = "意见反馈"; ObjectID = "fbU-V1-TqX"; */
+"fbU-V1-TqX.text" = "意见反馈";
+
+/* Class = "IBUILabel"; text = "K62路"; ObjectID = "fsO-VU-loy"; */
+"fsO-VU-loy.text" = "K62路";
+
+/* Class = "IBUILabel"; text = "广播电视台"; ObjectID = "g6m-P8-AsH"; */
+"g6m-P8-AsH.text" = "广播电视台";
+
+/* Class = "IBUILabel"; text = "新手指南"; ObjectID = "h9R-b7-Pg4"; */
+"h9R-b7-Pg4.text" = "新手指南";
+
+/* Class = "IBUIBarButtonItem"; title = "线路"; ObjectID = "iA9-HS-oRj"; */
+"iA9-HS-oRj.title" = "线路";
+
+/* Class = "IBUITableViewController"; title = "线路"; ObjectID = "iAR-XL-xK4"; */
+"iAR-XL-xK4.title" = "线路";
+
+/* Class = "IBUILabel"; text = "站点B"; ObjectID = "j33-S5-rTz"; */
+"j33-S5-rTz.text" = "站点B";
+
+/* Class = "IBUIBarButtonItem"; title = "附近"; ObjectID = "j88-jD-vj4"; */
+"j88-jD-vj4.title" = "附近";
+
+/* Class = "IBUINavigationItem"; title = "我的附近"; ObjectID = "jFi-wD-pKS"; */
+"jFi-wD-pKS.title" = "我的附近";
+
+/* Class = "IBUIBarButtonItem"; title = "线路"; ObjectID = "jRU-Xd-cIt"; */
+"jRU-Xd-cIt.title" = "线路";
+
+/* Class = "IBUILabel"; text = "站点A"; ObjectID = "kIm-13-df3"; */
+"kIm-13-df3.text" = "站点A";
+
+/* Class = "IBUITextField"; placeholder = "输入起点或定位"; ObjectID = "kJY-EU-ier"; */
+"kJY-EU-ier.placeholder" = "输入起点或定位";
+
+/* Class = "IBUINavigationItem"; title = "换乘查询"; ObjectID = "kJd-4U-BNj"; */
+"kJd-4U-BNj.title" = "换乘查询";
+
+/* Class = "IBUIButton"; normalTitle = "较快捷"; ObjectID = "ldM-fb-A0f"; */
+"ldM-fb-A0f.normalTitle" = "较快捷";
+
+/* Class = "IBUILabel"; text = "分享应用"; ObjectID = "n9P-FG-hqD"; */
+"n9P-FG-hqD.text" = "分享应用";
+
+/* Class = "IBUILabel"; text = "站点名称"; ObjectID = "nLt-jF-viS"; */
+"nLt-jF-viS.text" = "站点名称";
+
+/* Class = "IBUILabel"; text = "请选择站点"; ObjectID = "oQi-FC-YNG"; */
+"oQi-FC-YNG.text" = "请选择站点";
+
+/* Class = "IBUINavigationItem"; title = "换乘定位"; ObjectID = "rSU-05-9eY"; */
+"rSU-05-9eY.title" = "换乘定位";
+
+/* Class = "IBUITabBarItem"; title = "站点"; ObjectID = "ren-r7-jTr"; */
+"ren-r7-jTr.title" = "站点";
+
+/* Class = "IBUITextField"; placeholder = "输入终点或定位"; ObjectID = "s33-JF-G8B"; */
+"s33-JF-G8B.placeholder" = "输入终点或定位";
+
+/* Class = "IBUILabel"; text = "06:00"; ObjectID = "s99-Ci-epu"; */
+"s99-Ci-epu.text" = "06:00";
+
+/* Class = "IBUINavigationItem"; title = "线路地图"; ObjectID = "sMw-rL-m7O"; */
+"sMw-rL-m7O.title" = "线路地图";
+
+/* Class = "IBUIBarButtonItem"; title = "返回"; ObjectID = "tQ1-Hk-O3j"; */
+"tQ1-Hk-O3j.title" = "返回";
+
+/* Class = "IBUILabel"; text = "01"; ObjectID = "tRX-Js-DwM"; */
+"tRX-Js-DwM.text" = "01";
+
+/* Class = "IBUIViewController"; title = "意见反馈"; ObjectID = "uBa-Is-2Yb"; */
+"uBa-Is-2Yb.title" = "意见反馈";
+
+/* Class = "IBUINavigationItem"; title = "意见反馈"; ObjectID = "uGi-eS-WF9"; */
+"uGi-eS-WF9.title" = "意见反馈";
+
+/* Class = "IBUIButton"; normalTitle = "少换乘"; ObjectID = "uPa-SK-FU6"; */
+"uPa-SK-FU6.normalTitle" = "少换乘";
+
+/* Class = "IBUINavigationItem"; title = "换乘方案"; ObjectID = "ufG-he-agL"; */
+"ufG-he-agL.title" = "换乘方案";
+
+/* Class = "IBUINavigationItem"; title = "站点地图"; ObjectID = "w6g-dL-CzU"; */
+"w6g-dL-CzU.title" = "站点地图";
+
+/* Class = "IBUILabel"; text = "资讯 | 紧急路况 | 临时改线推送"; ObjectID = "xGd-ne-bEo"; */
+"xGd-ne-bEo.text" = "资讯 | 紧急路况 | 临时改线推送";
+
+/* Class = "IBUINavigationItem"; title = "最新资讯"; ObjectID = "xKh-9a-apq"; */
+"xKh-9a-apq.title" = "最新资讯";
+
+/* Class = "IBUILabel"; text = "实时数据刷新间隔(秒)"; ObjectID = "xxk-Ig-Qsd"; */
+"xxk-Ig-Qsd.text" = "实时数据刷新间隔(秒)";
+
+/* Class = "IBUITabBarItem"; title = "换乘"; ObjectID = "yIN-Bp-aQU"; */
+"yIN-Bp-aQU.title" = "换乘";
+
+/* Class = "IBUILabel"; text = "系统设置"; ObjectID = "ySr-wZ-LF9"; */
+"ySr-wZ-LF9.text" = "系统设置";
+
+/* Class = "IBUINavigationItem"; title = "线路实时"; ObjectID = "zdx-gh-5OF"; */
+"zdx-gh-5OF.title" = "线路实时";
