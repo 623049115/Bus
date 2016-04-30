@@ -262,7 +262,9 @@
 		A949573F1CD366D70082C422 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A949573E1CD366D70082C422 /* libsqlite3.0.tbd */; };
 		A94957411CD366EE0082C422 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A94957401CD366EE0082C422 /* libstdc++.6.0.9.tbd */; };
 		A94957431CD36A740082C422 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A94957421CD36A740082C422 /* mapapi.bundle */; };
+		A94C90EE1CD46A33008BD35D /* yc_bus_list.plist in Resources */ = {isa = PBXBuildFile; fileRef = A94C90ED1CD46A33008BD35D /* yc_bus_list.plist */; };
 		A9666B6E1CCCD4240030B16A /* yantai_326.dat in Resources */ = {isa = PBXBuildFile; fileRef = A9666B6D1CCCD4240030B16A /* yantai_326.dat */; };
+		A96F78861CD4BAE000152E3E /* yc_bus_route_details.plist in Resources */ = {isa = PBXBuildFile; fileRef = A96F78851CD4BAE000152E3E /* yc_bus_route_details.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -680,7 +682,9 @@
 		A949573E1CD366D70082C422 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		A94957401CD366EE0082C422 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		A94957421CD36A740082C422 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
+		A94C90ED1CD46A33008BD35D /* yc_bus_list.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = yc_bus_list.plist; sourceTree = "<group>"; };
 		A9666B6D1CCCD4240030B16A /* yantai_326.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = yantai_326.dat; sourceTree = "<group>"; };
+		A96F78851CD4BAE000152E3E /* yc_bus_route_details.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = yc_bus_route_details.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1130,6 +1134,8 @@
 				2DAEFDCC1AFCB43900E4CC0E /* template.html */,
 				2DA662F719F0D92D00DFED0B /* Info.plist */,
 				2DA662F819F0D92D00DFED0B /* main.m */,
+				A94C90ED1CD46A33008BD35D /* yc_bus_list.plist */,
+				A96F78851CD4BAE000152E3E /* yc_bus_route_details.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -1655,6 +1661,7 @@
 				2DAEFDBA1AF8BCCB00E4CC0E /* 换乘-绿色@2x.png in Resources */,
 				2DF713DE1A931D17008B5B93 /* 地图-搜索@2x.png in Resources */,
 				2DAEFDC01AF9B9AC00E4CC0E /* 换乘-起@2x.png in Resources */,
+				A96F78861CD4BAE000152E3E /* yc_bus_route_details.plist in Resources */,
 				2D4714261A6CB4D100F2DE04 /* UMFeedbackLocalizable.strings in Resources */,
 				2DAEFDDC1B03695A00E4CC0E /* aboutus@2x.png in Resources */,
 				2DC36E221ADBAC3F00B51489 /* 闹钟2@2x.png in Resources */,
@@ -1708,6 +1715,7 @@
 				2DA8D8FB1A834E33006BD1AF /* RennSDK.bundle in Resources */,
 				2DAEFDA91AF8A91F00E4CC0E /* 换乘-分割线@2x.png in Resources */,
 				2DB47BBE1AE5F9C600B34481 /* 地址搜索1@2x.png in Resources */,
+				A94C90EE1CD46A33008BD35D /* yc_bus_list.plist in Resources */,
 				2DAEFDE31B0369F300E4CC0E /* 01功能引导@2x.png in Resources */,
 				2D9D2B401A81EC4000410DD2 /* ShareSDKLocalizable.strings in Resources */,
 				2D5032851AE65F3800AA9D76 /* 站点-底部背景@2x.png in Resources */,

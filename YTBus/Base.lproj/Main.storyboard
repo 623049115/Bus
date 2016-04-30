@@ -478,31 +478,31 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.80784313725490198" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="烟台人力市场——宫家岛" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" id="5sm-8K-Ce5">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="三峡大学" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" adjustsLetterSpacingToFitWidth="YES" id="5sm-8K-Ce5">
                                 <rect key="frame" x="15" y="15" width="227" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="06:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s99-Ci-epu">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="07:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="s99-Ci-epu">
                                 <rect key="frame" x="36" y="43" width="36" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="18:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="evm-n0-7X5">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="21:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="evm-n0-7X5">
                                 <rect key="frame" x="101" y="43" width="36" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2.0元" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AmD-Za-qbS">
                                 <rect key="frame" x="166" y="43" width="36" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -530,8 +530,23 @@
                                     <action selector="changeDirection:" destination="U4C-Oa-85a" eventType="touchUpInside" id="K8a-xz-mq0"/>
                                 </connections>
                             </button>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="正在刷新.png" id="0hY-lG-wKd">
+                                <rect key="frame" x="287" y="464" width="1" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xJh-Xo-38B">
+                                <rect key="frame" x="278" y="460" width="28" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <state key="normal" image="手动刷新.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="disabled" image="手动刷新.png"/>
+                                <connections>
+                                    <action selector="userRefresh:" destination="U4C-Oa-85a" eventType="touchUpInside" id="vuD-kg-mlY"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="30" sectionHeaderHeight="15" sectionFooterHeight="15" id="c1U-JG-9Za">
-                                <rect key="frame" x="0.0" y="71" width="320" height="433"/>
+                                <rect key="frame" x="0.0" y="70" width="320" height="433"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -553,7 +568,7 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="广播电视台" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g6m-P8-AsH">
+                                                <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="三峡大学" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g6m-P8-AsH">
                                                     <rect key="frame" x="50" y="0.0" width="205" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -598,73 +613,6 @@
                                     <outlet property="delegate" destination="U4C-Oa-85a" id="bVv-KX-6bH"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" id="jfz-iK-G5u">
-                                <rect key="frame" x="0.0" y="-69" width="320" height="103"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="下拉菜单背景" id="Cd4-C3-edD">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="103"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ijx-6E-WIM">
-                                        <rect key="frame" x="269" y="72" width="36" height="28"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="菜单箭头">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="toggleMenu:" destination="U4C-Oa-85a" eventType="touchUpInside" id="U9z-eH-tUC"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="BKx-vN-L9G">
-                                        <rect key="frame" x="22" y="7" width="60" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="纠错">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="clickReport:" destination="U4C-Oa-85a" eventType="touchUpInside" id="nbv-RQ-ae1"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ZyG-YB-CIQ">
-                                        <rect key="frame" x="130" y="7" width="60" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="收藏">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="selected" image="收藏2"/>
-                                        <connections>
-                                            <action selector="clickFavor:" destination="U4C-Oa-85a" eventType="touchUpInside" id="Fhq-Jv-hvd"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KQh-tU-xNh">
-                                        <rect key="frame" x="237" y="7" width="60" height="60"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="分享-下拉">
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="clickShare:" destination="U4C-Oa-85a" eventType="touchUpInside" id="fKi-qj-zW8"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            </view>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="正在刷新.png" id="0hY-lG-wKd">
-                                <rect key="frame" x="287" y="464" width="1" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xJh-Xo-38B">
-                                <rect key="frame" x="278" y="460" width="28" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                <state key="normal" image="手动刷新.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="disabled" image="手动刷新.png"/>
-                                <connections>
-                                    <action selector="userRefresh:" destination="U4C-Oa-85a" eventType="touchUpInside" id="vuD-kg-mlY"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -680,16 +628,11 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="directionBtn" destination="BuA-mL-hgt" id="bpn-kN-YNK"/>
-                        <outlet property="dropDownBtn" destination="ijx-6E-WIM" id="yWz-H5-Opb"/>
                         <outlet property="endTime" destination="evm-n0-7X5" id="dXD-aJ-ylS"/>
-                        <outlet property="favorBtn" destination="ZyG-YB-CIQ" id="GfH-bu-v7Q"/>
                         <outlet property="lineDetail" destination="5sm-8K-Ce5" id="77H-J4-lW2"/>
-                        <outlet property="menu" destination="jfz-iK-G5u" id="vzg-lN-wtM"/>
                         <outlet property="price" destination="AmD-Za-qbS" id="CsM-UH-muA"/>
                         <outlet property="refreshBtn" destination="xJh-Xo-38B" id="Rcd-5p-CXT"/>
                         <outlet property="refreshHint" destination="0hY-lG-wKd" id="sYc-0k-O3u"/>
-                        <outlet property="reportErrorBtn" destination="BKx-vN-L9G" id="l2z-RN-k0E"/>
-                        <outlet property="shareBtn" destination="KQh-tU-xNh" id="EqC-vT-tsR"/>
                         <outlet property="startTime" destination="s99-Ci-epu" id="04c-7t-tkn"/>
                         <outlet property="tableView" destination="c1U-JG-9Za" id="yT4-o7-vrp"/>
                         <outlet property="topBackground" destination="fmK-dK-Cou" id="X92-un-2lv"/>
@@ -1383,12 +1326,10 @@
         <image name="setting_distance.png" width="28" height="28"/>
         <image name="setting_radius.png" width="28" height="28"/>
         <image name="setting_time.png" width="28" height="28"/>
-        <image name="下拉菜单背景" width="320" height="103"/>
         <image name="中间" width="22" height="30"/>
         <image name="交换" width="18" height="17"/>
         <image name="价" width="15" height="15"/>
         <image name="公交" width="19" height="18"/>
-        <image name="分享-下拉" width="60" height="60"/>
         <image name="分享.png" width="16" height="16"/>
         <image name="分隔线" width="1" height="1"/>
         <image name="切换1" width="56" height="15"/>
@@ -1410,8 +1351,6 @@
         <image name="换乘-路线.png" width="320" height="44"/>
         <image name="换向.png" width="25" height="47"/>
         <image name="搜索图标" width="11" height="13"/>
-        <image name="收藏" width="60" height="60"/>
-        <image name="收藏2" width="60" height="60"/>
         <image name="收藏站点.png" width="26" height="29"/>
         <image name="末" width="15" height="15"/>
         <image name="标签1" width="22" height="42"/>
@@ -1421,16 +1360,14 @@
         <image name="站点-底部背景.png" width="300" height="199"/>
         <image name="站点箭头" width="12" height="12"/>
         <image name="箭头" width="8" height="16"/>
-        <image name="纠错" width="60" height="60"/>
         <image name="纠错-对勾.png" width="16" height="16"/>
         <image name="线路圆点" width="15" height="15"/>
-        <image name="菜单箭头" width="16" height="14"/>
         <image name="设置.png" width="16" height="16"/>
         <image name="车辆标注" width="17" height="14"/>
         <image name="首" width="15" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="XU4-GO-KEV"/>
+        <segue reference="eZd-qq-MSP"/>
         <segue reference="HE1-G9-ZEi"/>
     </inferredMetricsTieBreakers>
 </document>

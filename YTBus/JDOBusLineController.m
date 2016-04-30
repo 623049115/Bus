@@ -41,20 +41,22 @@
     self.tableView.tableFooterView.backgroundColor = [UIColor clearColor];
     self.tableView.backgroundColor = [UIColor colorWithHex:@"dfded9"];
     
-    _db = [JDODatabase sharedDB];
-    if (_db) {
-        [self loadData];
-    }else{
-        dbObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"db_finished" object:nil queue:nil usingBlock:^(NSNotification *note) {
-            _db = [JDODatabase sharedDB];
-            [self loadData];
-        }];
-    }
+//    _db = [JDODatabase sharedDB];
+//    if (_db) {
+//        [self loadData];
+//    }else{
+//        dbObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"db_finished" object:nil queue:nil usingBlock:^(NSNotification *note) {
+//            _db = [JDODatabase sharedDB];
+//            [self loadData];
+//        }];
+//    }
+//    
+//    favorObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"favor_line_changed" object:nil queue:nil usingBlock:^(NSNotification *note) {
+//        [self loadFavorLines];
+//        [self.tableView reloadData];
+//    }];
+    [self loadData];
     
-    favorObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"favor_line_changed" object:nil queue:nil usingBlock:^(NSNotification *note) {
-        [self loadFavorLines];
-        [self.tableView reloadData];
-    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -69,7 +71,7 @@
 }
 
 - (void)loadData{
-    [self loadFavorLines];
+//    [self loadFavorLines];
     [self loadAllLines];
     
     [self.tableView reloadData];
@@ -146,21 +148,34 @@
 }
 
 - (void)loadAllLines{
-    _allLines = [NSMutableArray new];
-    FMResultSet *rs = [_db executeQuery:GetAllLines];
-    while ([rs next]) {
-        JDOBusLine *busLine = [JDOBusLine new];
-        busLine.lineId = [rs stringForColumn:@"ID"];
-        busLine.lineName = [rs stringForColumn:@"BUSLINENAME"];
-        busLine.zhixian = [rs intForColumn:@"ZHIXIAN"];
-        busLine.stationA = [rs stringForColumn:@"STATIONANAME"];
-        busLine.stationB = [rs stringForColumn:@"STATIONBNAME"];
-        busLine.attach = [rs intForColumn:@"ATTACH"];
+//    _allLines = [NSMutableArray new];
+//    FMResultSet *rs = [_db executeQuery:GetAllLines];
+//    while ([rs next]) {
+//        JDOBusLine *busLine = [JDOBusLine new];
+//        busLine.lineId = [rs stringForColumn:@"ID"];
+//        busLine.lineName = [rs stringForColumn:@"BUSLINENAME"];
+//        busLine.zhixian = [rs intForColumn:@"ZHIXIAN"];
+//        busLine.stationA = [rs stringForColumn:@"STATIONANAME"];
+//        busLine.stationB = [rs stringForColumn:@"STATIONBNAME"];
+//        busLine.attach = [rs intForColumn:@"ATTACH"];
+//        [_allLines addObject:busLine];
+//    }
+//    [rs close];
+//    [self sortLines:_allLines];
+//    _filterAllLines = [_allLines copy];
+    
+    NSString *linePath = [[NSBundle mainBundle] pathForResource:@"yc_bus_list" ofType:@"plist"];
+    NSArray *lines = [NSArray arrayWithContentsOfFile:linePath];
+    _allLines =  [NSMutableArray array];
+    for (NSDictionary * line in lines) {
+        JDOBusLine *busLine = [[JDOBusLine alloc] init];
+        busLine.lineId = line[@"routeId"];
+        busLine.lineName = line[@"routeName"];
+        busLine.stationA = line[@"start"];
+        busLine.stationB = line[@"end"];
         [_allLines addObject:busLine];
     }
-    [rs close];
-    [self sortLines:_allLines];
-    _filterAllLines = [_allLines copy];
+    
 }
 
 - (void) sortLines:(NSMutableArray *) lines{
@@ -197,10 +212,10 @@
     if ([segue.identifier isEqualToString:@"toRealtimeFromLine"]) {
         JDORealTimeController *rt = segue.destinationViewController;
         JDOBusLine *busLine;
-        if (selectedIndexPath.section == 0 && _filterFavorLines.count>0) {
+        if (selectedIndexPath.section == 0 && _filterAllLines.count>0) {
             busLine = _filterFavorLines[selectedIndexPath.row];
         }else{
-            busLine = _filterAllLines[selectedIndexPath.row];
+            busLine = _allLines[selectedIndexPath.row];
         }
         rt.busLine = busLine;
         rt.busLine.zhixian = busLine.zhixian;   // copy对象未能正确复制zhixian属性，却能复制showingIndex属性！！原因未知。。。
@@ -221,13 +236,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     int sectionNum = 0;
-    if (_filterFavorLines.count>0) {
-        sectionNum++;
-    }
-    if (_filterAllLines.count>0) {
-        sectionNum++;
-    }
-    return sectionNum;
+//    if (_filterAllLines.count>0) {
+//        sectionNum++;
+//    }
+//    if (_allLines.count>0) {
+//        sectionNum++;
+//    }
+//    return sectionNum;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -244,13 +260,8 @@
     label.textColor = [UIColor whiteColor];
     label.font = [UIFont boldSystemFontOfSize:16.0];
     label.backgroundColor = [UIColor clearColor];
-    if (section == 0 && _filterFavorLines.count>0) {
-        iv.image = [UIImage imageNamed:@"收藏线路顶部"];
-        label.text = @"收藏线路";
-    }else{
-        iv.image = [UIImage imageNamed:@"所有线路顶部"];
-        label.text = @"所有线路";
-    }
+    iv.image = [UIImage imageNamed:@"所有线路顶部"];
+    label.text = @"所有线路";
     [label sizeToFit];
     CGRect f = label.frame;
     f.origin.x = (320-f.size.width)/2;
@@ -267,10 +278,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 && _filterFavorLines.count>0) {
-        return _filterFavorLines.count;
+    if (section == 0 && _filterAllLines.count>0) {
+        return _filterAllLines.count;
     }
-    return _filterAllLines.count;
+    return _allLines.count;
 }
 
 
@@ -284,23 +295,32 @@
     }
     
     JDOBusLine *busLine;
-    if (indexPath.section == 0 && _filterFavorLines.count>0) {
-        busLine =  (JDOBusLine *)_filterFavorLines[indexPath.row];
-        [(UILabel *)[cell viewWithTag:1001] setText:busLine.lineName];
-        JDOBusLineDetail *lineDetail = busLine.lineDetailPair[0];
-        NSArray *lineNamePair = [lineDetail.lineDetail componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"－-"]];
-        [(UILabel *)[cell viewWithTag:1002] setText:lineNamePair[0]];
-        [(UILabel *)[cell viewWithTag:1003] setText:lineNamePair.count>1?lineNamePair[1]:lineNamePair[0]];
-        [(UIImageView *)[cell viewWithTag:1004] setImage:[UIImage imageNamed:@"路牌-收藏"]];
-        [(UIImageView *)[cell viewWithTag:1005] setImage:[UIImage imageNamed:@"始"]];
-        [(UIImageView *)[cell viewWithTag:1006] setImage:[UIImage imageNamed:@"终"]];
-        if (busLine.nearbyStationPair && busLine.nearbyStationPair.count > 0) {
-            [(UIImageView *)[cell viewWithTag:1007] setHidden:false];
-        }else{
-            [(UIImageView *)[cell viewWithTag:1007] setHidden:true];
-        }
-    }else{
+    if (indexPath.section == 0 && _filterAllLines.count>0) {
+//        busLine =  (JDOBusLine *)_filterAllLines[indexPath.row];
+//        [(UILabel *)[cell viewWithTag:1001] setText:busLine.lineName];
+//        JDOBusLineDetail *lineDetail = busLine.lineDetailPair[0];
+//        NSArray *lineNamePair = [lineDetail.lineDetail componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"－-"]];
+//        [(UILabel *)[cell viewWithTag:1002] setText:lineNamePair[0]];
+//        [(UILabel *)[cell viewWithTag:1003] setText:lineNamePair.count>1?lineNamePair[1]:lineNamePair[0]];
+//        [(UIImageView *)[cell viewWithTag:1004] setImage:[UIImage imageNamed:@"路牌-收藏"]];
+//        [(UIImageView *)[cell viewWithTag:1005] setImage:[UIImage imageNamed:@"始"]];
+//        [(UIImageView *)[cell viewWithTag:1006] setImage:[UIImage imageNamed:@"终"]];
+//        if (busLine.nearbyStationPair && busLine.nearbyStationPair.count > 0) {
+//            [(UIImageView *)[cell viewWithTag:1007] setHidden:false];
+//        }else{
+//            [(UIImageView *)[cell viewWithTag:1007] setHidden:true];
+//        }
+        
         busLine =  (JDOBusLine *)_filterAllLines[indexPath.row];
+        [(UILabel *)[cell viewWithTag:1001] setText:busLine.lineName];
+        [(UILabel *)[cell viewWithTag:1002] setText:(busLine.stationA==nil?@"未知站点":busLine.stationA)];
+        [(UILabel *)[cell viewWithTag:1003] setText:(busLine.stationB==nil?@"未知站点":busLine.stationB)];
+        [(UIImageView *)[cell viewWithTag:1004] setImage:[UIImage imageNamed:@"路牌-线路"]];
+        [(UIImageView *)[cell viewWithTag:1005] setImage:[UIImage imageNamed:@"线路圆点"]];
+        [(UIImageView *)[cell viewWithTag:1006] setImage:[UIImage imageNamed:@"线路圆点"]];
+        [(UIImageView *)[cell viewWithTag:1007] setHidden:true];
+    }else{
+        busLine =  (JDOBusLine *)_allLines[indexPath.row];
         [(UILabel *)[cell viewWithTag:1001] setText:busLine.lineName];
         [(UILabel *)[cell viewWithTag:1002] setText:(busLine.stationA==nil?@"未知站点":busLine.stationA)];
         [(UILabel *)[cell viewWithTag:1003] setText:(busLine.stationB==nil?@"未知站点":busLine.stationB)];
@@ -316,7 +336,7 @@
 
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    _filterFavorLines = [_favorLines mutableCopy];
+//    _filterFavorLines = [_favorLines mutableCopy];
     _filterAllLines = [_allLines mutableCopy];
     if ([searchBar.text isEqualToString:@""]) {
         [self.tableView reloadData];
@@ -324,14 +344,14 @@
     }
     
     // 执行过滤
-    NSMutableIndexSet *deleteFavorIndex = [NSMutableIndexSet indexSet];
-    for(int i=0; i<_filterFavorLines.count; i++){
-        JDOBusLine *line = _filterFavorLines[i];
-        if(![line.lineName containsString:searchText]){
-            [deleteFavorIndex addIndex:i];
-        }
-    }
-    [_filterFavorLines removeObjectsAtIndexes:deleteFavorIndex];
+//    NSMutableIndexSet *deleteFavorIndex = [NSMutableIndexSet indexSet];
+//    for(int i=0; i<_filterFavorLines.count; i++){
+//        JDOBusLine *line = _filterFavorLines[i];
+//        if(![line.lineName containsString:searchText]){
+//            [deleteFavorIndex addIndex:i];
+//        }
+//    }
+//    [_filterFavorLines removeObjectsAtIndexes:deleteFavorIndex];
     
     NSMutableIndexSet *deleteAllIndex = [NSMutableIndexSet indexSet];
     for(int i=0; i<_filterAllLines.count; i++){

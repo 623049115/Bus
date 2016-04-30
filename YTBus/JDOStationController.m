@@ -131,6 +131,10 @@
 
 #pragma mark - Navigation
 
+- (void)performSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 //    if ([segue.identifier isEqualToString:@"toStationMap1"] || [segue.identifier isEqualToString:@"toStationMap2"]) {
 //        UITableViewCell *cell = sender;
@@ -151,6 +155,14 @@
 //        }
 //        
 //    }
+    if ([segue.identifier isEqualToString:@"toRealtimeFromLine"]) {
+        if (_filterAllStations.count > 0) {
+            ((JDORealTimeController *)segue.destinationViewController).busLine = _filterAllStations[selectedIndexPath.row];
+        } else {
+            ((JDORealTimeController *)segue.destinationViewController).busLine = _allStations[selectedIndexPath.row];
+        }
+    }
+    
 }
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{

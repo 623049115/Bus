@@ -14,8 +14,8 @@
 /* Class = "IBUIViewController"; title = "站点地图"; ObjectID = "5js-5E-5MP"; */
 "5js-5E-5MP.title" = "站点地图";
 
-/* Class = "IBUILabel"; text = "烟台人力市场——宫家岛"; ObjectID = "5sm-8K-Ce5"; */
-"5sm-8K-Ce5.text" = "烟台人力市场——宫家岛";
+/* Class = "IBUILabel"; text = "三峡大学"; ObjectID = "5sm-8K-Ce5"; */
+"5sm-8K-Ce5.text" = "三峡大学";
 
 /* Class = "IBUINavigationItem"; title = "更多内容"; ObjectID = "6E7-HP-wKt"; */
 "6E7-HP-wKt.title" = "更多内容";
@@ -125,8 +125,8 @@
 /* Class = "IBUILabel"; text = "Subtitle"; ObjectID = "aej-om-oZv"; */
 "aej-om-oZv.text" = "Subtitle";
 
-/* Class = "IBUILabel"; text = "广播电视台广播电视台"; ObjectID = "b0i-bR-Rga"; */
-"b0i-bR-Rga.text" = "广播电视台广播电视台";
+/* Class = "IBUILabel"; text = "三峡大学"; ObjectID = "b0i-bR-Rga"; */
+"b0i-bR-Rga.text" = "三峡大学";
 
 /* Class = "IBUIViewController"; title = "地图"; ObjectID = "bBZ-w8-kZ8"; */
 "bBZ-w8-kZ8.title" = "地图";
@@ -164,8 +164,8 @@
 /* Class = "IBUITabBarItem"; title = "附近"; ObjectID = "err-Fg-HWc"; */
 "err-Fg-HWc.title" = "附近";
 
-/* Class = "IBUILabel"; text = "18:00"; ObjectID = "evm-n0-7X5"; */
-"evm-n0-7X5.text" = "18:00";
+/* Class = "IBUILabel"; text = "21:00"; ObjectID = "evm-n0-7X5"; */
+"evm-n0-7X5.text" = "21:00";
 
 /* Class = "IBUITabBarItem"; title = "更多"; ObjectID = "f59-4z-mLJ"; */
 "f59-4z-mLJ.title" = "更多";
@@ -179,8 +179,8 @@
 /* Class = "IBUILabel"; text = "K62路"; ObjectID = "fsO-VU-loy"; */
 "fsO-VU-loy.text" = "K62路";
 
-/* Class = "IBUILabel"; text = "广播电视台"; ObjectID = "g6m-P8-AsH"; */
-"g6m-P8-AsH.text" = "广播电视台";
+/* Class = "IBUILabel"; text = "三峡大学"; ObjectID = "g6m-P8-AsH"; */
+"g6m-P8-AsH.text" = "三峡大学";
 
 /* Class = "IBUILabel"; text = "新手指南"; ObjectID = "h9R-b7-Pg4"; */
 "h9R-b7-Pg4.text" = "新手指南";
@@ -233,8 +233,8 @@
 /* Class = "IBUITextField"; placeholder = "输入终点或定位"; ObjectID = "s33-JF-G8B"; */
 "s33-JF-G8B.placeholder" = "输入终点或定位";
 
-/* Class = "IBUILabel"; text = "06:00"; ObjectID = "s99-Ci-epu"; */
-"s99-Ci-epu.text" = "06:00";
+/* Class = "IBUILabel"; text = "07:00"; ObjectID = "s99-Ci-epu"; */
+"s99-Ci-epu.text" = "07:00";
 
 /* Class = "IBUINavigationItem"; title = "线路地图"; ObjectID = "sMw-rL-m7O"; */
 "sMw-rL-m7O.title" = "线路地图";
