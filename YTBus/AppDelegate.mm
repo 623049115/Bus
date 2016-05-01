@@ -17,12 +17,6 @@
 #import "IQKeyboardManager.h"
 
 // ShareSDK
-#import <ShareSDK/ShareSDK.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <TencentOpenAPI/TencentOAuth.h>
-#import "WXApi.h"
-#import "WeiboSDK.h"
-#import <QZoneConnection/ISSQZoneApp.h>
 
 
 #import "JDOStartupController.h"
@@ -97,11 +91,13 @@
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [ShareSDK handleOpenURL:url wxDelegate:self];
+//    return [ShareSDK handleOpenURL:url wxDelegate:self];
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [ShareSDK handleOpenURL:url sourceApplication:sourceApplication annotation:annotation wxDelegate:self];
+//    return [ShareSDK handleOpenURL:url sourceApplication:sourceApplication annotation:annotation wxDelegate:self];
+    return YES;
 }
 
 - (void) initBMKConfig{

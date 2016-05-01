@@ -14,7 +14,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) BMKMapManager *mapManager;
 
-//@property (nonatomic, strong) BMKUserLocation *userLocation;
+@property (nonatomic, strong) BMKUserLocation *userLocation;
 @property (assign, nonatomic) int realtimeRequestCount;
 @property (strong, nonatomic) NSMutableDictionary *systemParam;
 

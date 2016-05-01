@@ -7,7 +7,6 @@
 //  Copyright (c) 2013年 ShareSDK.cn. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import <ShareSDK/ShareSDK.h>
 
 /**
  *	@brief	自定义分享视图控制器
@@ -23,7 +22,7 @@
     
     UIImage *_image;
     NSString *_content;
-    ShareType _type;
+//    ShareType _type;
     CGFloat _keyboardHeight;
 }
 
@@ -35,7 +34,7 @@
  *
  *	@return	视图控制器
  */
-- (id)initWithImage:(UIImage *)image content:(NSString *)content type:(ShareType)type ;
+//- (id)initWithImage:(UIImage *)image content:(NSString *)content type:(ShareType)type ;
 
 
 @end

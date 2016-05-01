@@ -7,11 +7,11 @@
 //  Copyright (c) 2013年 ShareSDK.cn. All rights reserved.
 //
 #import "JDOShareController.h"
-#import <AGCommon/UIImage+Common.h>
-#import <AGCommon/UIDevice+Common.h>
-#import <AGCommon/UINavigationBar+Common.h>
-#import <AGCommon/UIColor+Common.h>
-#import <AGCommon/NSString+Common.h>
+//#import <AGCommon/UIImage+Common.h>
+//#import <AGCommon/UIDevice+Common.h>
+//#import <AGCommon/UINavigationBar+Common.h>
+//#import <AGCommon/UIColor+Common.h>
+//#import <AGCommon/NSString+Common.h>
 #import "JDOConstants.h"
 
 #define PADDING_LEFT 5.0
@@ -29,7 +29,7 @@
 #define WORD_COUNT_LABEL_PADDING_RIGHT 10
 #define WORD_COUNT_LABEL_PADDING_BOTTOM 19
 
-@interface JDOShareController () <ISSViewDelegate>
+@interface JDOShareController ()
 
 @end
 
@@ -38,15 +38,15 @@
     NSInteger count;
 }
 
-- (id)initWithImage:(UIImage *)image content:(NSString *)content type:(ShareType)type{
-    self = [self init];
-    if (self){
-        _image = image;
-        _content = content;
-        _type = type;
-    }
-    return self;
-}
+//- (id)initWithImage:(UIImage *)image content:(NSString *)content type:(ShareType)type{
+//    self = [self init];
+//    if (self){
+//        _image = image;
+//        _content = content;
+//        _type = type;
+//    }
+//    return self;
+//}
 
 - (id)init{
     self = [super init];
@@ -65,10 +65,10 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    if ([[UIDevice currentDevice].systemVersion versionStringCompare:@"7.0"] != NSOrderedAscending){
-        [self setExtendedLayoutIncludesOpaqueBars:NO];
-        [self setEdgesForExtendedLayout:SSRectEdgeBottom | SSRectEdgeLeft | SSRectEdgeRight];
-    }
+//    if ([[UIDevice currentDevice].systemVersion versionStringCompare:@"7.0"] != NSOrderedAscending){
+//        [self setExtendedLayoutIncludesOpaqueBars:NO];
+//        [self setEdgesForExtendedLayout:SSRectEdgeBottom | SSRectEdgeLeft | SSRectEdgeRight];
+//    }
     self.view.backgroundColor = [UIColor colorWithHex:@"dfded9"];
     
     _contentBG = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"5sBG"]];
@@ -108,7 +108,7 @@
     //字数
     _wordCountLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _wordCountLabel.backgroundColor = [UIColor clearColor];
-    _wordCountLabel.textColor = [UIColor colorWithRGB:0xd2d2d2];
+//    _wordCountLabel.textColor = [UIColor colorWithRGB:0xd2d2d2];
     _wordCountLabel.text = @"70";
     _wordCountLabel.font = [UIFont boldSystemFontOfSize:15];
     [_wordCountLabel sizeToFit];
@@ -128,7 +128,7 @@
     if (count < 0){
         _wordCountLabel.textColor = [UIColor redColor];
     }else{
-        _wordCountLabel.textColor = [UIColor colorWithRGB:0xd2d2d2];
+//        _wordCountLabel.textColor = [UIColor colorWithRGB:0xd2d2d2];
     }
 }
 
@@ -138,66 +138,66 @@
 }
 
 - (void)publishButtonClickHandler:(id)sender{    
-    id<ISSContent> publishContent = [ShareSDK content:[_textView.text stringByAppendingFormat:@"//%@",_content]
-                                       defaultContent:nil
-                                                image:[ShareSDK jpegImageWithImage:[UIImage imageNamed:@"iphone5s"] quality:1]
-                                                title:@"“烟台公交”上线啦！"
-                                                  url:Redirect_Url
-                                          description:[_textView.text stringByAppendingFormat:@"//%@",_content]
-                                            mediaType:SSPublishContentMediaTypeText];
-    // QQ空间的内容
-//    [publishContent addQQSpaceUnitWithTitle:INHERIT_VALUE url:INHERIT_VALUE site:@"胶东在线" fromUrl:@"http://www.jiaodong.net" comment:[JDOUtils isEmptyString:_textView.text]?@"分享":_textView.text summary:_content image:INHERIT_VALUE type:INHERIT_VALUE playUrl:INHERIT_VALUE nswb:INHERIT_VALUE];
+//    id<ISSContent> publishContent = [ShareSDK content:[_textView.text stringByAppendingFormat:@"//%@",_content]
+//                                       defaultContent:nil
+//                                                image:[ShareSDK jpegImageWithImage:[UIImage imageNamed:@"iphone5s"] quality:1]
+//                                                title:@"“掌上公交”上线啦！"
+//                                                  url:Redirect_Url
+//                                          description:[_textView.text stringByAppendingFormat:@"//%@",_content]
+//                                            mediaType:SSPublishContentMediaTypeText];
+//    // QQ空间的内容
+////    [publishContent addQQSpaceUnitWithTitle:INHERIT_VALUE url:INHERIT_VALUE site:@"胶东在线" fromUrl:@"http://www.jiaodong.net" comment:[JDOUtils isEmptyString:_textView.text]?@"分享":_textView.text summary:_content image:INHERIT_VALUE type:INHERIT_VALUE playUrl:INHERIT_VALUE nswb:INHERIT_VALUE];
+//    
+//    [publishContent addSinaWeiboUnitWithContent:[_textView.text stringByAppendingFormat:@"//%@//下载地址:%@",_content,Redirect_Url] image:INHERIT_VALUE];
+//    // 人人的内容，ShareSDK的bug，把description和message搞成一样的了
+//    [publishContent addRenRenUnitWithName:@"“掌上公交”上线啦！等车不再捉急，到点准时来接你。" description:_content url:INHERIT_VALUE message:[JDOUtils isEmptyString:_textView.text]?@"分享":_textView.text image:INHERIT_VALUE caption:INHERIT_VALUE];
+//    
+//    id<ISSAuthOptions> authOptions = [ShareSDK authOptionsWithAutoAuth:YES
+//                                                         allowCallback:YES
+//                                                         authViewStyle:SSAuthViewStyleModal
+//                                                          viewDelegate:nil
+//                                               authManagerViewDelegate:nil];
     
-    [publishContent addSinaWeiboUnitWithContent:[_textView.text stringByAppendingFormat:@"//%@//下载地址:%@",_content,Redirect_Url] image:INHERIT_VALUE];
-    // 人人的内容，ShareSDK的bug，把description和message搞成一样的了
-    [publishContent addRenRenUnitWithName:@"“烟台公交”上线啦！等车不再捉急，到点准时来接你。" description:_content url:INHERIT_VALUE message:[JDOUtils isEmptyString:_textView.text]?@"分享":_textView.text image:INHERIT_VALUE caption:INHERIT_VALUE];
     
-    id<ISSAuthOptions> authOptions = [ShareSDK authOptionsWithAutoAuth:YES
-                                                         allowCallback:YES
-                                                         authViewStyle:SSAuthViewStyleModal
-                                                          viewDelegate:nil
-                                               authManagerViewDelegate:nil];
-    
-    
-    BOOL needAuth = NO;
-    if (![ShareSDK hasAuthorizedWithType:_type]){
-        needAuth = YES;
-        [ShareSDK getUserInfoWithType:_type authOptions:authOptions result:^(BOOL result, id<ISSPlatformUser> userInfo, id<ICMErrorInfo> error) {
-            if (result){
-               [ShareSDK shareContent:publishContent type:_type authOptions:authOptions statusBarTips:NO result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                   if (error) {
-                       [JDOUtils showHUDText:@"分享失败，请重试" inView:self.view];
-                       NSLog(@"%@",error.errorDescription);
-                       [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
-                   }else{
-                       [_textView resignFirstResponder];
-                       [self dismissViewControllerAnimated:YES completion:nil];
-                   }
-               }];
-            }else{
-               [JDOUtils showHUDText:@"授权失败，请重试" inView:self.view];
-                [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
-            }
-       }];
-    }
-    
-    if (!needAuth){
-        [ShareSDK shareContent:publishContent type:_type authOptions:authOptions statusBarTips:NO result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-            if (error) {
-                [JDOUtils showHUDText:@"分享失败，请重试" inView:self.view];
-                NSLog(@"%@",error.errorDescription);
-                [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
-            }else{
-                [_textView resignFirstResponder];
-                [self dismissViewControllerAnimated:YES completion:nil];
-            }
-        }];
-    }
+//    BOOL needAuth = NO;
+//    if (![ShareSDK hasAuthorizedWithType:_type]){
+//        needAuth = YES;
+//        [ShareSDK getUserInfoWithType:_type authOptions:authOptions result:^(BOOL result, id<ISSPlatformUser> userInfo, id<ICMErrorInfo> error) {
+//            if (result){
+//               [ShareSDK shareContent:publishContent type:_type authOptions:authOptions statusBarTips:NO result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+//                   if (error) {
+//                       [JDOUtils showHUDText:@"分享失败，请重试" inView:self.view];
+//                       NSLog(@"%@",error.errorDescription);
+//                       [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
+//                   }else{
+//                       [_textView resignFirstResponder];
+//                       [self dismissViewControllerAnimated:YES completion:nil];
+//                   }
+//               }];
+//            }else{
+//               [JDOUtils showHUDText:@"授权失败，请重试" inView:self.view];
+//                [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
+//            }
+//       }];
+//    }
+//    
+//    if (!needAuth){
+//        [ShareSDK shareContent:publishContent type:_type authOptions:authOptions statusBarTips:NO result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+//            if (error) {
+//                [JDOUtils showHUDText:@"分享失败，请重试" inView:self.view];
+//                NSLog(@"%@",error.errorDescription);
+//                [self performSelector:@selector(textGetFocus) withObject:nil afterDelay:1.0f];
+//            }else{
+//                [_textView resignFirstResponder];
+//                [self dismissViewControllerAnimated:YES completion:nil];
+//            }
+//        }];
+//    }
 }
 
-- (void)viewOnWillDismiss:(UIViewController *)viewController shareType:(ShareType)shareType{
-    
-}
+//- (void)viewOnWillDismiss:(UIViewController *)viewController shareType:(ShareType)shareType{
+//    
+//}
 - (void) textGetFocus{
     [_textView becomeFirstResponder];
 }

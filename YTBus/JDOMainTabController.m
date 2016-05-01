@@ -36,7 +36,7 @@
     }
     
     // 设置tabBarItem的图标
-    NSArray *imageNames = @[@"附近",@"线路",@"站点",@"换乘",@"更多"];
+    NSArray *imageNames = @[@"线路",@"站点",@"换乘",@"更多"];
     for(int i=0; i<self.tabBar.items.count; i++){
         UITabBarItem *item = self.tabBar.items[i];
         item.title = nil;

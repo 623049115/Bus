@@ -8,13 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "JDOInterChangeController.h"
-//#import "BMapKit.h"
+#import <BaiduMapAPI_Map/BMKMapView.h>
+#import <BaiduMapAPI_Location/BMKLocationService.h>
+#import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
+#import <BaiduMapAPI_Search/BMKPoiSearchType.h>
 
 @interface JDOLocationMapController : UIViewController
 
 @property (nonatomic,assign) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic,assign) int startOrEnd;
 @property (nonatomic,assign) JDOInterChangeController *parentVC;
-//@property (nonatomic,strong) BMKPoiInfo *initialPoi;
+@property (nonatomic,strong) BMKPoiInfo *initialPoi;
 
 @end

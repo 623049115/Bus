@@ -7,7 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JDOStationModel.h"
+
+@protocol JDOStationControllerDelegate <NSObject>
+
+@optional
+- (void)jdoStationControllerDidSelectedStation:(JDOStationModel *)stationModel;
+
+@end
 
 @interface JDOStationController : UITableViewController
+
+@property (nonatomic,weak) id<JDOStationControllerDelegate> delegate;
 
 @end

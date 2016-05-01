@@ -10,21 +10,21 @@
 
 @implementation TBClusterAnnotation
 
-//- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate count:(NSInteger)count
-//{
-//    self = [super init];
-//    if (self) {
-//        _coordinate = coordinate;
-//        _count = count;
-//    }
-//    return self;
-//}
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate count:(NSInteger)count
+{
+    self = [super init];
+    if (self) {
+        _coordinate = coordinate;
+        _count = count;
+    }
+    return self;
+}
 
-//- (NSUInteger)hash
-//{
-//    NSString *toHash = [NSString stringWithFormat:@"%.5F%.5F", self.coordinate.latitude, self.coordinate.longitude];
-//    return [toHash hash];
-//}
+- (NSUInteger)hash
+{
+    NSString *toHash = [NSString stringWithFormat:@"%.5F%.5F", self.coordinate.latitude, self.coordinate.longitude];
+    return [toHash hash];
+}
 
 - (BOOL)isEqual:(id)object
 {

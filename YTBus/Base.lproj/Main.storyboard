@@ -143,9 +143,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tRX-Js-DwM">
-                                                    <rect key="frame" x="28" y="10" width="18" height="18"/>
+                                                    <rect key="frame" x="28" y="20" width="18" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -341,7 +341,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="lineLabel" destination="ZTV-av-4WY" id="RLS-XN-BHC"/>
-                        <outlet property="mapView" destination="9oJ-Kb-wss" id="A1O-a6-gCc"/>
+                        <outlet property="mapView" destination="9oJ-Kb-wss" id="qMC-ay-v17"/>
                         <outlet property="tableView" destination="UJx-2V-MJC" id="qep-in-k56"/>
                     </connections>
                 </viewController>
@@ -669,25 +669,6 @@
             </objects>
             <point key="canvasLocation" x="1719" y="-397"/>
         </scene>
-        <!--附近-->
-        <scene sceneID="8EC-sx-Lxb">
-            <objects>
-                <navigationController id="1d5-AA-aU6" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="附近" id="err-Fg-HWc">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="wBw-9N-B0S">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="c87-bU-CWv" kind="relationship" relationship="rootViewController" id="z4u-Gr-Z9A"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EnX-Nk-RzN" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="257" y="-1114"/>
-        </scene>
         <!--主界面-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -699,7 +680,6 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="1d5-AA-aU6" kind="relationship" relationship="viewControllers" id="6A3-Ck-27k"/>
                         <segue destination="zWQ-mD-2B8" kind="relationship" relationship="viewControllers" id="U8A-Lw-61S"/>
                         <segue destination="X4d-Yb-zeJ" kind="relationship" relationship="viewControllers" id="fbk-dV-15C"/>
                         <segue destination="vAB-Vg-tn2" kind="relationship" relationship="viewControllers" id="MkW-h1-HgE"/>
@@ -920,88 +900,8 @@
                         <sections>
                             <tableViewSection id="53P-Gi-B6H">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="6TL-RJ-nGg">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6TL-RJ-nGg" id="fTQ-pT-xZ4">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="6a4-mz-pXE">
-                                                    <rect key="frame" x="177" y="13" width="129" height="29"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <segments>
-                                                        <segment title="500"/>
-                                                        <segment title="1000"/>
-                                                        <segment title="2000"/>
-                                                    </segments>
-                                                    <color key="tintColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <action selector="onDistanceChanged:" destination="rX4-JA-c19" eventType="valueChanged" id="3hj-mr-Vqm"/>
-                                                    </connections>
-                                                </segmentedControl>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="附近站点半径范围(米)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="O61-fo-8DA">
-                                                    <rect key="frame" x="37" y="17" width="137" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <view contentMode="scaleToFill" id="2tw-mq-RJY">
-                                                    <rect key="frame" x="0.0" y="54" width="320" height="1"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
-                                                </view>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting_radius.png" id="8GV-1Y-Lh5">
-                                                    <rect key="frame" x="8" y="13" width="28" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="yHX-r9-hxP">
-                                        <rect key="frame" x="0.0" y="55" width="320" height="55"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yHX-r9-hxP" id="o35-2a-ubE">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="附近站点刷新位移(米)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Pf4-Ov-ks6">
-                                                    <rect key="frame" x="37" y="17" width="137" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <view contentMode="scaleToFill" id="46E-eb-PsJ">
-                                                    <rect key="frame" x="0.0" y="54" width="320" height="1"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
-                                                </view>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="setting_distance.png" id="5ha-6Q-Dw2">
-                                                    <rect key="frame" x="8" y="13" width="28" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="m16-Pd-VPd">
-                                                    <rect key="frame" x="177" y="13" width="129" height="29"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <segments>
-                                                        <segment title="200"/>
-                                                        <segment title="500"/>
-                                                        <segment title="1000"/>
-                                                    </segments>
-                                                    <color key="tintColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <action selector="onRefreshMoveChanged:" destination="rX4-JA-c19" eventType="valueChanged" id="UJx-qJ-3Ln"/>
-                                                    </connections>
-                                                </segmentedControl>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="rpp-9F-7ni">
-                                        <rect key="frame" x="0.0" y="110" width="320" height="55"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rpp-9F-7ni" id="tCp-05-Mex">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
@@ -1050,9 +950,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="系统设置" id="Pbd-86-WbO"/>
                     <connections>
-                        <outlet property="distanceSegment" destination="6a4-mz-pXE" id="dg9-Z2-Jli"/>
                         <outlet property="intervalSegment" destination="e4H-Bq-2cx" id="2Yf-Pm-lxT"/>
-                        <outlet property="refreshMoveSegment" destination="m16-Pd-VPd" id="QzO-eN-4tk"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cJf-7Q-eot" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1137,13 +1035,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="站点名称" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D6N-AU-e3z">
-                                            <rect key="frame" x="50" y="0.0" width="159" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                            <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
                                         <imageView userInteractionEnabled="NO" tag="1003" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="分隔线" id="Mdi-ka-Gyk">
                                             <rect key="frame" x="20" y="43" width="280" height="1"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1159,6 +1050,13 @@
                                             <rect key="frame" x="20" y="15" width="15" height="15"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </imageView>
+                                        <label opaque="NO" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="站点名称" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="D6N-AU-e3z">
+                                            <rect key="frame" x="50" y="0.0" width="159" height="44"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.50980392156862742" green="0.50980392156862742" blue="0.50980392156862742" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -1265,7 +1163,7 @@
                         <barButtonItem key="backBarButtonItem" title="站点" id="ZWL-Ol-2Bq"/>
                         <barButtonItem key="rightBarButtonItem" image="地图-搜索.png" style="plain" id="SZK-tx-nx0">
                             <connections>
-                                <segue destination="OeW-2e-V8G" kind="push" id="gBX-0J-Np3"/>
+                                <segue destination="OeW-2e-V8G" kind="push" identifier="toStationSearch" id="gBX-0J-Np3"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1323,8 +1221,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="setting_distance.png" width="28" height="28"/>
-        <image name="setting_radius.png" width="28" height="28"/>
         <image name="setting_time.png" width="28" height="28"/>
         <image name="中间" width="22" height="30"/>
         <image name="交换" width="18" height="17"/>
@@ -1367,7 +1263,7 @@
         <image name="首" width="15" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="eZd-qq-MSP"/>
-        <segue reference="HE1-G9-ZEi"/>
+        <segue reference="GdE-z5-Rfk"/>
+        <segue reference="XU4-GO-KEV"/>
     </inferredMetricsTieBreakers>
 </document>

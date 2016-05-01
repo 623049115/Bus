@@ -16,10 +16,8 @@
 #import "JSONKit.h"
 #import "JDOBusModel.h"
 #import "CMPopTipView.h"
-#import <ShareSDK/ShareSDK.h>
 #import "JDOShareController.h"
 #import "AppDelegate.h"
-#import <QZoneConnection/ISSQZoneApp.h>
 #import "JDOReportController.h"
 #import "MBProgressHUD.h"
 #import "JDOAlertTool.h"
@@ -1274,44 +1272,44 @@
     }
     
     //构造分享内容，这里的content和titile提供给非微博类平台使用，微信好友使用titile、content不能超过26个字，朋友圈只使用title，图片使用logo。
-    id<ISSContent> publishContent = [ShareSDK content:content
-                                       defaultContent:nil
-                                                image:[ShareSDK jpegImageWithImage:[UIImage imageNamed:@"分享80"] quality:1.0]
-                                                title:@"“掌上公交”上线啦！等车不再捉急，到点准时来接你。"
-                                                  url:Redirect_Url
-                                          description:content
-                                            mediaType:SSPublishContentMediaTypeNews];
+//    id<ISSContent> publishContent = [ShareSDK content:content
+//                                       defaultContent:nil
+//                                                image:[ShareSDK jpegImageWithImage:[UIImage imageNamed:@"分享80"] quality:1.0]
+//                                                title:@"“掌上公交”上线啦！等车不再捉急，到点准时来接你。"
+//                                                  url:Redirect_Url
+//                                          description:content
+//                                            mediaType:SSPublishContentMediaTypeNews];
     //QQ使用title和content(大概26个字以内)，但能显示字数更少。
-    [publishContent addQQUnitWithType:INHERIT_VALUE content:[NSString stringWithFormat:@"我正在查询%@车的实时位置,你也来试试吧!",self.busLine.lineName] title:@"“掌上公交”上线啦！" url:INHERIT_VALUE image:INHERIT_VALUE];
-    [publishContent addQQSpaceUnitWithTitle:@"“掌上公交”上线啦！" url:INHERIT_VALUE site:@"掌上公交" fromUrl:Redirect_Url comment:nil summary:content image:INHERIT_VALUE type:INHERIT_VALUE playUrl:INHERIT_VALUE nswb:INHERIT_VALUE];
+//    [publishContent addQQUnitWithType:INHERIT_VALUE content:[NSString stringWithFormat:@"我正在查询%@车的实时位置,你也来试试吧!",self.busLine.lineName] title:@"“掌上公交”上线啦！" url:INHERIT_VALUE image:INHERIT_VALUE];
+//    [publishContent addQQSpaceUnitWithTitle:@"“掌上公交”上线啦！" url:INHERIT_VALUE site:@"掌上公交" fromUrl:Redirect_Url comment:nil summary:content image:INHERIT_VALUE type:INHERIT_VALUE playUrl:INHERIT_VALUE nswb:INHERIT_VALUE];
+//    
+//    id<ISSQZoneApp> app =(id<ISSQZoneApp>)[ShareSDK getClientWithType:ShareTypeQQSpace];
+//    NSObject *qZone;
+//    if (app.isClientInstalled) {
+//        qZone = SHARE_TYPE_NUMBER(ShareTypeQQSpace);
+//    }else{
+//        qZone = [self getShareItem:ShareTypeQQSpace content:content];
+//    }
     
-    id<ISSQZoneApp> app =(id<ISSQZoneApp>)[ShareSDK getClientWithType:ShareTypeQQSpace];
-    NSObject *qZone;
-    if (app.isClientInstalled) {
-        qZone = SHARE_TYPE_NUMBER(ShareTypeQQSpace);
-    }else{
-        qZone = [self getShareItem:ShareTypeQQSpace content:content];
-    }
-    
-    NSArray *shareList = [ShareSDK customShareListWithType:SHARE_TYPE_NUMBER(ShareTypeWeixiSession),SHARE_TYPE_NUMBER(ShareTypeWeixiTimeline),SHARE_TYPE_NUMBER(ShareTypeQQ),qZone,[self getShareItem:ShareTypeSinaWeibo content:content],[self getShareItem:ShareTypeRenren content:content],nil];
-    
-    [ShareSDK showShareActionSheet:nil shareList:shareList content:publishContent statusBarTips:NO authOptions:nil shareOptions:nil result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-            if (state == SSResponseStateSuccess){
-                NSLog(@"分享成功");
-            }else if (state == SSResponseStateFail){
-                [JDOUtils showHUDText:[NSString stringWithFormat:@"分享失败:%ld",(long)[error errorCode]] inView:self.view];
-            }
-        }
-     ];
+//    NSArray *shareList = [ShareSDK customShareListWithType:SHARE_TYPE_NUMBER(ShareTypeWeixiSession),SHARE_TYPE_NUMBER(ShareTypeWeixiTimeline),SHARE_TYPE_NUMBER(ShareTypeQQ),qZone,[self getShareItem:ShareTypeSinaWeibo content:content],[self getShareItem:ShareTypeRenren content:content],nil];
+//    
+//    [ShareSDK showShareActionSheet:nil shareList:shareList content:publishContent statusBarTips:NO authOptions:nil shareOptions:nil result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+//            if (state == SSResponseStateSuccess){
+//                NSLog(@"分享成功");
+//            }else if (state == SSResponseStateFail){
+//                [JDOUtils showHUDText:[NSString stringWithFormat:@"分享失败:%ld",(long)[error errorCode]] inView:self.view];
+//            }
+//        }
+//     ];
 }
 
-- (id<ISSShareActionSheetItem>) getShareItem:(ShareType) type content:(NSString *)content{
-    return [ShareSDK shareActionSheetItemWithTitle:[ShareSDK getClientNameWithType:type] icon:[ShareSDK getClientIconWithType:type] clickHandler:^{
-        JDOShareController *vc = [[JDOShareController alloc] initWithImage:screenImage content:content type:type];
-        UINavigationController *naVC = [[UINavigationController alloc] initWithRootViewController:vc];
-        [self presentViewController:naVC animated:true completion:nil];
-    }];
-}
+//- (id<ISSShareActionSheetItem>) getShareItem:(ShareType) type content:(NSString *)content{
+//    return [ShareSDK shareActionSheetItemWithTitle:[ShareSDK getClientNameWithType:type] icon:[ShareSDK getClientIconWithType:type] clickHandler:^{
+//        JDOShareController *vc = [[JDOShareController alloc] initWithImage:screenImage content:content type:type];
+//        UINavigationController *naVC = [[UINavigationController alloc] initWithRootViewController:vc];
+//        [self presentViewController:naVC animated:true completion:nil];
+//    }];
+//}
 
 #pragma mark- UITableViewDelegate && UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

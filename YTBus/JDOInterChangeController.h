@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "BMapKit.h"
+#import <BaiduMapAPI_Search/BMKSearchComponent.h>
+#import <BaiduMapAPI_Search/BMKPoiSearchType.h>
 
 @interface JDOInterChangeController : UIViewController
 
 @property (nonatomic,weak) IBOutlet UITextField *startField;
 @property (nonatomic,weak) IBOutlet UITextField *endField;
-//@property (nonatomic,strong) BMKPoiInfo *startPoi;
-//@property (nonatomic,strong) BMKPoiInfo *endPoi;
+@property (nonatomic,strong) BMKPoiInfo *startPoi;
+@property (nonatomic,strong) BMKPoiInfo *endPoi;
 
 @end

@@ -83,7 +83,7 @@
         //        "reply_id" = "CA68D3B5C-BEB5-49EA-A0E7-09FB85DEEEFF";
         //        type = "user_reply";
         self.textLabel.textColor = [UIColor colorWithHex:@"1673ba"];
-        self.textLabel.text = [model[@"type"] isEqualToString:@"user_reply"]?@"我":@"烟台公交客服";
+        self.textLabel.text = [model[@"type"] isEqualToString:@"user_reply"]?@"我":@"掌上公交客服";
         self.detailTextLabel.text = model[@"content"];
         self.pubtimeLabel.text = [JDOUtils formatDate:[NSDate dateWithTimeIntervalSince1970:[model[@"created_at"] longValue]/1000.0f] withFormatter:DateFormatYMDHM];
         self.separatorLine.hidden = false;

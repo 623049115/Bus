@@ -87,7 +87,7 @@
 
 - (void)showDownloadAlert{
     alert = [[JDOAlertTool alloc] init];
-    [alert showAlertView:self title:@"强烈推荐" message:@"“看天下，知烟台”，更多新闻、资讯、爆料内容，尽在烟台第一掌上媒体“胶东在线新闻客户端”。" cancelTitle:@"关闭" otherTitle1:@"前往下载" otherTitle2:nil cancelAction:^{
+    [alert showAlertView:self title:@"强烈推荐" message:@"“看天下，知掌上”" cancelTitle:@"关闭" otherTitle1:@"前往下载" otherTitle2:nil cancelAction:^{
         
     } otherAction1:^{
         NSURL *url = [NSURL URLWithString:@"itms-apps://itunes.apple.com/cn/app/jiao-dong-zai-xian/id693957416?mt=8"];

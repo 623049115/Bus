@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>stationId</key>
+		<string>1</string>
+		<key>stationName</key>
+		<string>平云一路</string>
+		<key>lat</key>
+		<real>30.719402</real>
+		<key>lon</key>
+		<real>111.317889</real>
+		<key>buses</key>
+		<array>
+			<string>B68</string>
+			<string>B100</string>
+			<string>B63</string>
+		</array>
+	</dict>
+</array>
+</plist>

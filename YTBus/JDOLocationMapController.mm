@@ -12,12 +12,12 @@
 #import "JDOInterChangeController.h"
 #import "JDOConstants.h"
 
-@interface JDOLocationMapController () <UINavigationBarDelegate,BMKMapViewDelegate>{
-//    BMKLocationService *_locService;
-//    BMKGeoCodeSearch *_searcher;
+@interface JDOLocationMapController () <UINavigationBarDelegate,BMKMapViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate>{
+    BMKLocationService *_locService;
+    BMKGeoCodeSearch *_searcher;
     UIImageView *marker;
     CMPopTipView *popTipView;
-//    BMKPoiInfo *poi;
+    BMKPoiInfo *poi;
 }
 
 @property (weak, nonatomic) IBOutlet BMKMapView *mapView;
@@ -35,33 +35,35 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    _mapView.zoomEnabled = true;
-//    _mapView.zoomEnabledWithTap = true;
-//    _mapView.scrollEnabled = true;
-//    _mapView.rotateEnabled = true;
-//    _mapView.overlookEnabled = false;
-//    _mapView.showMapScaleBar = false;
-//    _mapView.minZoomLevel = 12;
-    // 进入时候根据传入的定位位置进行设置(定位位置保存为全局变量)，并相应增大初始化时候的缩放级别
+    _mapView.zoomEnabled = true;
+    _mapView.zoomEnabledWithTap = true;
+    _mapView.scrollEnabled = true;
+    _mapView.rotateEnabled = true;
+    _mapView.overlookEnabled = false;
+    _mapView.showMapScaleBar = false;
+    _mapView.minZoomLevel = 12;
+     //进入时候根据传入的定位位置进行设置(定位位置保存为全局变量)，并相应增大初始化时候的缩放级别
 //    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-//    if (self.initialPoi) {
-//        _mapView.centerCoordinate = self.initialPoi.pt;
-//        _mapView.zoomLevel = 15;
-//    }else if (delegate.userLocation) {
+    if (self.initialPoi) {
+        _mapView.centerCoordinate = self.initialPoi.pt;
+        _mapView.zoomLevel = 15;
+    }
+//    else if (delegate.userLocation) {
 //        CLLocationCoordinate2D coor = delegate.userLocation.location.coordinate;
 //        if (coor.latitude>YT_MIN_Y && coor.latitude<YT_MAX_Y && coor.longitude>YT_MIN_X && coor.longitude<YT_MAX_X) {
 //            _mapView.centerCoordinate = delegate.userLocation.location.coordinate;
 //            _mapView.zoomLevel = 15;
-//        }else{  // 若定位范围出现偏差，超出烟台市区范围，则指向市政府位置
+//        }else{  // 若定位范围出现偏差，超出宜昌市区范围，则指向市政府位置
 //            _mapView.centerCoordinate = CLLocationCoordinate2DMake(37.4698,121.454);
 //            _mapView.zoomLevel = 13;
 //        }
-//    }else{
-//        _mapView.centerCoordinate = CLLocationCoordinate2DMake(37.4698,121.454);   // 市政府的位置
-//        _mapView.zoomLevel = 13;
 //    }
-//    
-//    _locService = [[BMKLocationService alloc] init];
+    else{
+        _mapView.centerCoordinate = CLLocationCoordinate2DMake(30.6976020000,111.2929710000);   // 市政府的位置
+        _mapView.zoomLevel = 13;
+    }
+    
+    _locService = [[BMKLocationService alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,36 +74,45 @@
 -(void)viewWillAppear:(BOOL)animated {
     _mapView.delegate = self;
     [_mapView viewWillAppear];
-//
-////    _searcher.delegate = self;
-//    _locService.delegate = self;
-//    [_locService startUserLocationService];
-//    _mapView.showsUserLocation = NO;
-//    _mapView.userTrackingMode = BMKUserTrackingModeNone;//设置定位的状态
-//    _mapView.showsUserLocation = YES;
-//    BMKLocationViewDisplayParam *param = [BMKLocationViewDisplayParam new];
-//    param.isAccuracyCircleShow = false;
-//    [_mapView updateLocationViewWithParam:param];
+
+    _searcher.delegate = self;
+    _locService.delegate = self;
+    [_locService startUserLocationService];
+    _mapView.showsUserLocation = NO;
+    _mapView.userTrackingMode = BMKUserTrackingModeNone;//设置定位的状态
+    _mapView.showsUserLocation = YES;
+    BMKLocationViewDisplayParam *param = [BMKLocationViewDisplayParam new];
+    param.isAccuracyCircleShow = false;
+    [_mapView updateLocationViewWithParam:param];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [_mapView viewWillDisappear];
     _mapView.delegate = nil;
-//
-//    [_locService stopUserLocationService];
-//    _locService.delegate = nil;
-//    _searcher.delegate = nil;
-//    _mapView.showsUserLocation = NO;
+
+    [_locService stopUserLocationService];
+    _locService.delegate = nil;
+    _searcher.delegate = nil;
+    _mapView.showsUserLocation = NO;
 }
 
-//- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation{
-////    [_mapView updateLocationData:userLocation];
-//}
+#pragma mark - BMKLocationServiceDelegate
+
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation{
+    [_mapView updateLocationData:userLocation];
+}
 #pragma mark - BMKMapViewDelegate
-- (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"BMKMapView控件初始化完成" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
-//    [alert show];
-//    alert = nil;
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView{
+    CGPoint p = [_mapView convertCoordinate:_mapView.centerCoordinate toPointToView:self.view];
+    marker = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location_marker"]];
+    marker.frame = CGRectMake(p.x-11, p.y-16, 22, 32);
+    [self.view addSubview:marker];
+    if (self.initialPoi) {
+        [self createPopViewTitle:self.initialPoi.name message:self.initialPoi.address];
+    }else{
+        [self mapView:mapView regionDidChangeAnimated:true];
+    }
+    
 }
 
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
@@ -110,6 +121,44 @@
 
 - (void)mapview:(BMKMapView *)mapView onDoubleClick:(CLLocationCoordinate2D)coordinate {
     NSLog(@"map view: double click");
+}
+
+- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+    if (popTipView) {
+        [popTipView dismissAnimated:true];
+        popTipView = nil;
+    }
+    _searcher =[[BMKGeoCodeSearch alloc] init];
+    _searcher.delegate = self;
+    BMKReverseGeoCodeOption *reverseGeoCodeSearchOption = [[BMKReverseGeoCodeOption alloc] init];
+    reverseGeoCodeSearchOption.reverseGeoPoint = mapView.centerCoordinate;
+    BOOL flag = [_searcher reverseGeoCode:reverseGeoCodeSearchOption];
+    if(!flag){
+        NSLog(@"反geo检索发送失败");
+    }
+}
+
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result: (BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
+    if (_searcher != searcher) {
+        return;
+    }
+    if (error == BMK_SEARCH_NO_ERROR) {
+        NSString *title, *detail;
+        if (result.poiList.count>0) {
+            poi = (BMKPoiInfo *)result.poiList[0];
+            title = poi.name;
+            detail = poi.address;
+        }else{
+            title = nil;
+            detail = [[result.addressDetail.district stringByAppendingString:result.addressDetail.streetName] stringByAppendingString:result.addressDetail.streetNumber];
+            poi = [[BMKPoiInfo alloc] init];
+            poi.address = detail;
+            poi.pt = result.location;
+        }
+        [self createPopViewTitle:title message:detail];
+    }else{
+        NSLog(@"抱歉，未找到结果");
+    }
 }
 
 #pragma mark - private
@@ -121,67 +170,17 @@
 
 - (IBAction)confirm:(id)sender{
     if (_startOrEnd == 0) {
-//        self.parentVC.startPoi = poi;
-//        self.parentVC.startField.text = poi.name?poi.name:poi.address;
+        self.parentVC.startPoi = poi;
+        self.parentVC.startField.text = poi.name?poi.name:poi.address;
     }else if(_startOrEnd == 1){
-//        self.parentVC.endPoi = poi;
-//        self.parentVC.endField.text = poi.name?poi.name:poi.address;
+        self.parentVC.endPoi = poi;
+        self.parentVC.endField.text = poi.name?poi.name:poi.address;
     }
     [self.presentingViewController dismissViewControllerAnimated:true completion:^{
         
     }];
 }
 
-//- (void)mapViewDidFinishLoading:(BMKMapView *)mapView{
-//    CGPoint p = [_mapView convertCoordinate:_mapView.centerCoordinate toPointToView:self.view];
-//    marker = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location_marker"]];
-//    marker.frame = CGRectMake(p.x-11, p.y-16, 22, 32);
-//    [self.view addSubview:marker];
-//    if (self.initialPoi) {
-//        [self createPopViewTitle:self.initialPoi.name message:self.initialPoi.address];
-//    }else{
-//        [self mapView:mapView regionDidChangeAnimated:true];
-//    }
-//    
-//}
-//
-//- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
-//    if (popTipView) {
-//        [popTipView dismissAnimated:true];
-//        popTipView = nil;
-//    }
-//    _searcher =[[BMKGeoCodeSearch alloc] init];
-//    _searcher.delegate = self;
-//    BMKReverseGeoCodeOption *reverseGeoCodeSearchOption = [[BMKReverseGeoCodeOption alloc] init];
-//    reverseGeoCodeSearchOption.reverseGeoPoint = mapView.centerCoordinate;
-//    BOOL flag = [_searcher reverseGeoCode:reverseGeoCodeSearchOption];
-//    if(!flag){
-//        NSLog(@"反geo检索发送失败");
-//    }
-//}
-//
-//-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result: (BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
-//    if (_searcher != searcher) {
-//        return;
-//    }
-//    if (error == BMK_SEARCH_NO_ERROR) {
-//        NSString *title, *detail;
-//        if (result.poiList.count>0) {
-//            poi = (BMKPoiInfo *)result.poiList[0];
-//            title = poi.name;
-//            detail = poi.address;
-//        }else{
-//            title = nil;
-//            detail = [[result.addressDetail.district stringByAppendingString:result.addressDetail.streetName] stringByAppendingString:result.addressDetail.streetNumber];
-//            poi = [[BMKPoiInfo alloc] init];
-//            poi.address = detail;
-//            poi.pt = result.location;
-//        }
-//        [self createPopViewTitle:title message:detail];
-//    }else{
-//        NSLog(@"抱歉，未找到结果");
-//    }
-//}
 - (void) createPopViewTitle:(NSString *)title message:(NSString *)message {
     popTipView = [[CMPopTipView alloc] initWithTitle:title message:message];
     popTipView.disableTapToDismiss = true;

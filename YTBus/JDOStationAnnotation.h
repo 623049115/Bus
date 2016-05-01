@@ -6,12 +6,13 @@
 //  Copyright (c) 2014年 胶东在线. All rights reserved.
 //
 
-//#import "BMKPointAnnotation.h"
+
 #import "JDOStationModel.h"
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
-@interface JDOStationAnnotation : NSObject
+@interface JDOStationAnnotation : BMKPointAnnotation
 
-@property (nonatomic,strong) JDOStationModel *station;
+@property (nonatomic,strong) NSDictionary *station;
 @property (nonatomic,assign) BOOL selected;
 @property (nonatomic,assign) int index;
 

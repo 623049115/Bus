@@ -20,7 +20,7 @@
 #define Red_Color [UIColor colorWithRed:240/255.0f green:50/255.0f blue:50/255.0f alpha:1.0f]
 
 
-@interface JDOPoiSearch : NSObject
+@interface JDOPoiSearch : BMKPoiSearch
 
 @property (nonatomic,strong) UITextField *tf;
 
@@ -76,8 +76,8 @@
 @end
 
 @implementation JDOInterChangeController{
-//    BMKRouteSearch *_routeSearch;
-//    BMKTransitPolicy transitPolicy;
+    BMKRouteSearch *_routeSearch;
+    BMKTransitPolicy transitPolicy;
     NSMutableArray *_list;
     NSMutableArray *_plans;
     MBProgressHUD *hud;
@@ -149,11 +149,16 @@
     [MobClick beginLogPageView:@"transfer"];
     [MobClick event:@"transfer"];
     [MobClick beginEvent:@"transfer"];
+    
+    _routeSearch = [[BMKRouteSearch alloc] init];
+    _routeSearch.delegate = self;
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [MobClick endLogPageView:@"transfer"];
     [MobClick endEvent:@"transfer"];
+    
+    _routeSearch.delegate = nil;
 }
 
 - (IBAction)directionChanged:(UIButton *)sender {
@@ -176,97 +181,99 @@
     }
     
     // 有坐标的优先使用坐标，没有的使用文本
-   // BMKPlanNode *start = [BMKPlanNode new];
-//    if (_startPoi && [_startPoi.name isEqualToString:_startField.text]) {
+    BMKPlanNode *start = [[BMKPlanNode alloc] init];
+    if (_startPoi && [_startPoi.name isEqualToString:_startField.text]) {
 //        start.pt = _startPoi.pt;
-//    }else{
-//        start.name = _startField.text;
-//    }
-//    BMKPlanNode *end = [BMKPlanNode new];
-//    if (_endPoi && [_endPoi.name isEqualToString:_endField.text]) {
+        start.name = _startPoi.name;
+    }else{
+        start.name = _startField.text;
+    }
+    BMKPlanNode *end = [[BMKPlanNode alloc] init];
+    if (_endPoi && [_endPoi.name isEqualToString:_endField.text]) {
 //        end.pt = _endPoi.pt;
-//    }else{
-//        end.name = _endField.text;
-//    }
-//    
-//    BMKTransitRoutePlanOption *transitRouteSearchOption = [BMKTransitRoutePlanOption new];
-//    transitRouteSearchOption.city = @"烟台市";
-//    transitRouteSearchOption.transitPolicy = transitPolicy;
-//    transitRouteSearchOption.from = start;
-//    transitRouteSearchOption.to = end;
-//    
-//    BOOL flag = [_routeSearch transitSearch:transitRouteSearchOption];
-//    
-//    if(!flag){
-//        [JDOUtils showHUDText:@"检索请求失败" inView:self.view];
-//    }else{
-//        hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
-////        hud.minShowTime = 1.0f;
-//        hud.labelText = @"正在检索";
-////        self.searchBtn.enabled = false;
-//    }
+        end.name = _endPoi.name;
+    }else{
+        end.name = _endField.text;
+    }
+    
+    BMKTransitRoutePlanOption *transitRouteSearchOption = [[BMKTransitRoutePlanOption alloc] init];
+    transitRouteSearchOption.city = @"宜昌市";
+    transitRouteSearchOption.transitPolicy = transitPolicy;
+    transitRouteSearchOption.from = start;
+    transitRouteSearchOption.to = end;
+    
+    BOOL flag = [_routeSearch transitSearch:transitRouteSearchOption];
+    
+    if(!flag){
+        [JDOUtils showHUDText:@"检索请求失败" inView:self.view];
+    }else{
+        hud = [MBProgressHUD showHUDAddedTo:self.view animated:true];
+//        hud.minShowTime = 1.0f;
+        hud.labelText = @"正在检索";
+//        self.searchBtn.enabled = false;
+    }
 }
 
 - (void)doSuggestionSearch:(UITextField *)tf{
-//    if (tf == _startField) {
-////        [_locations1 removeAllObjects];
-//        [_locSearch1 poiSearchInCity:[self createPoiOptionArea:@"烟台" keyword:tf.text]];
-//    }else{
-////        [_locations2 removeAllObjects];
-//        [_locSearch2 poiSearchInCity:[self createPoiOptionArea:@"烟台" keyword:tf.text]];
-//    }
+    if (tf == _startField) {
+//        [_locations1 removeAllObjects];
+        [_locSearch1 poiSearchInCity:[self createPoiOptionArea:@"宜昌市" keyword:tf.text]];
+    }else{
+//        [_locations2 removeAllObjects];
+        [_locSearch2 poiSearchInCity:[self createPoiOptionArea:@"宜昌市" keyword:tf.text]];
+    }
 }
 
-//- (BMKCitySearchOption *) createPoiOptionArea:(NSString *)area keyword:(NSString *)keyword{
-//    BMKCitySearchOption *option = [[BMKCitySearchOption alloc] init];
-//    option.city = area;
-//    option.pageIndex = 0;
-//    option.pageCapacity = 10;
-//    option.keyword = [@"烟台" stringByAppendingString:keyword];// 区域限制不起作用,加城市前缀
-//    return option;
-//}
+- (BMKCitySearchOption *) createPoiOptionArea:(NSString *)area keyword:(NSString *)keyword{
+    BMKCitySearchOption *option = [[BMKCitySearchOption alloc] init];
+    option.city = area;
+    option.pageIndex = 0;
+    option.pageCapacity = 10;
+    option.keyword = [@"宜昌" stringByAppendingString:keyword];// 区域限制不起作用,加城市前缀
+    return option;
+}
 
-//- (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult *)poiResultList errorCode:(BMKSearchErrorCode)error{
-//    UITextField *tf = ((JDOPoiSearch *)searcher).tf;
-//    if (![tf isFirstResponder]) {
-//        return;
-//    }
-//    NSMutableArray *locations;
-//    UITableView *dropDown;
-//    if (tf == _startField) {
-//        locations = _locations1;
-//        dropDown = _dropDown1;
-//    }else if (tf == _endField){
-//        locations = _locations2;
-//        dropDown = _dropDown2;
-//    }
-//    if (error == BMK_SEARCH_NO_ERROR) {
-//        [locations removeAllObjects];
-//        for (int i=0; i<poiResultList.poiInfoList.count; i++) {
-//            [locations addObject:poiResultList.poiInfoList[i]];
-//        }
-//        // 公交站排在最前面
-//        [locations sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-//            BMKPoiInfo *info1 = obj1;
-//            BMKPoiInfo *info2 = obj2;
-//            return info1.epoitype>=info2.epoitype?NSOrderedAscending:NSOrderedDescending;
-//        }];
-//        [dropDown reloadData];
-//        if(locations.count > 0){
-//            [self animateDropDownList:dropDown show:true];
-//            [dropDown scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:false];
-//        }else{
-//            [self animateDropDownList:dropDown show:false];
-//        }
-//    }else if(error == BMK_SEARCH_RESULT_NOT_FOUND){
-//        [dropDown reloadData];
-//        if(locations.count > 0){
-//            [self animateDropDownList:dropDown show:true];
-//        }else{
-//            [self animateDropDownList:dropDown show:false];
-//        }
-//    }
-//}
+- (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult *)poiResultList errorCode:(BMKSearchErrorCode)error{
+    UITextField *tf = ((JDOPoiSearch *)searcher).tf;
+    if (![tf isFirstResponder]) {
+        return;
+    }
+    NSMutableArray *locations;
+    UITableView *dropDown;
+    if (tf == _startField) {
+        locations = _locations1;
+        dropDown = _dropDown1;
+    }else if (tf == _endField){
+        locations = _locations2;
+        dropDown = _dropDown2;
+    }
+    if (error == BMK_SEARCH_NO_ERROR) {
+        [locations removeAllObjects];
+        for (int i=0; i<poiResultList.poiInfoList.count; i++) {
+            [locations addObject:poiResultList.poiInfoList[i]];
+        }
+        // 公交站排在最前面
+        [locations sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            BMKPoiInfo *info1 = obj1;
+            BMKPoiInfo *info2 = obj2;
+            return info1.epoitype>=info2.epoitype?NSOrderedAscending:NSOrderedDescending;
+        }];
+        [dropDown reloadData];
+        if(locations.count > 0){
+            [self animateDropDownList:dropDown show:true];
+            [dropDown scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:false];
+        }else{
+            [self animateDropDownList:dropDown show:false];
+        }
+    }else if(error == BMK_SEARCH_RESULT_NOT_FOUND){
+        [dropDown reloadData];
+        if(locations.count > 0){
+            [self animateDropDownList:dropDown show:true];
+        }else{
+            [self animateDropDownList:dropDown show:false];
+        }
+    }
+}
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
     _currentTf = textField;
@@ -358,79 +365,79 @@
     [_changeType0 setImage:(sender==_changeType0?[UIImage imageNamed:@"圆点"]:[UIImage imageNamed:@"圆点灰"]) forState:UIControlStateNormal];
     [_changeType1 setImage:(sender==_changeType1?[UIImage imageNamed:@"圆点"]:[UIImage imageNamed:@"圆点灰"]) forState:UIControlStateNormal];
     [_changeType2 setImage:(sender==_changeType2?[UIImage imageNamed:@"圆点"]:[UIImage imageNamed:@"圆点灰"]) forState:UIControlStateNormal];
-//    transitPolicy = sender==_changeType0?BMK_TRANSIT_TIME_FIRST:(sender==_changeType1?BMK_TRANSIT_TRANSFER_FIRST:BMK_TRANSIT_WALK_FIRST);
+    transitPolicy = sender==_changeType0?BMK_TRANSIT_TIME_FIRST:(sender==_changeType1?BMK_TRANSIT_TRANSFER_FIRST:BMK_TRANSIT_WALK_FIRST);
 }
 
 - (IBAction)setLocation:(UIButton *)sender{
     [self performSegueWithIdentifier:@"toLocationMap" sender:sender];
 }
 
-//- (void)onGetTransitRouteResult:(BMKRouteSearch *)searcher result:(BMKTransitRouteResult *)result errorCode:(BMKSearchErrorCode)error{
-////    self.searchBtn.enabled = true;
-//    [hud hide:true];
-//    
-//    if (error != BMK_SEARCH_NO_ERROR) {
-//        NSString *errorInfo;
-//        switch (error) {
-//            case BMK_SEARCH_AMBIGUOUS_KEYWORD:  errorInfo = @"检索词有岐义";  break;
-//            case BMK_SEARCH_AMBIGUOUS_ROURE_ADDR:  errorInfo = @"检索地址有岐义";  break;
-//            case BMK_SEARCH_RESULT_NOT_FOUND:  errorInfo = @"没有找到检索结果";  break;
-//            case BMK_SEARCH_ST_EN_TOO_NEAR:  errorInfo = @"起终点太近";  break;
-//            default:    errorInfo = @"服务器错误";   break;
-//        }
-//        [JDOUtils showHUDText:errorInfo inView:self.view];
-//        return;
-//    }
-//    
-//    [_list removeAllObjects];
-//    [_plans removeAllObjects];
-//    for (int i=0; i<result.routes.count; i++) {
-//        BMKTransitRouteLine *plan = (BMKTransitRouteLine *)result.routes[i];
-//        [_plans addObject:plan];
-//        JDOInterChangeModel *model = [JDOInterChangeModel new];
-//        [_list addObject:model];
-//        
-//        if (plan.distance>999) {    //%.Ng代表N位有效数字(包括小数点前面的)，%.Nf代表N位小数位
-//            model.distance = [NSString stringWithFormat:@"%.1f公里",plan.distance/1000.0f];
-//        }else{
-//            model.distance = [NSString stringWithFormat:@"%d米",plan.distance];
-//        }
-//        if (plan.duration.hours!=0) {
-//            model.duration = [NSString stringWithFormat:@"%d小时%d分",plan.duration.hours,plan.duration.minutes];
-//        }else{
-//            model.duration = [NSString stringWithFormat:@"%d分钟",plan.duration.minutes];
-//        }
-//        
-//        int busChangeNum=0;
-//        for (int j=0; j<plan.steps.count; j++) {
-//            BMKTransitStep *aStep = plan.steps[j];
-//            if (aStep.stepType == BMK_BUSLINE) {
-//                busChangeNum++;
-//                NSString *busName = aStep.vehicleInfo.title;
-//                int stationNumber = aStep.vehicleInfo.passStationNum;
-//                if (model.busChangeInfo == nil) {
-//                    model.busChangeInfo = [NSMutableString stringWithString:busName];
-//                }else{
-//                    [model.busChangeInfo appendFormat:@" -> %@",busName];
-//                }
-//                model.busStationNumber += stationNumber;
-//            }
-//        }
-//        model.type = busChangeNum>1?1:0;    // 0:直达,1:转乘
-//    }
-//    [self.tableView reloadData];
-//}
+- (void)onGetTransitRouteResult:(BMKRouteSearch *)searcher result:(BMKTransitRouteResult *)result errorCode:(BMKSearchErrorCode)error{
+//    self.searchBtn.enabled = true;
+    [hud hide:true];
+    
+    if (error != BMK_SEARCH_NO_ERROR) {
+        NSString *errorInfo;
+        switch (error) {
+            case BMK_SEARCH_AMBIGUOUS_KEYWORD:  errorInfo = @"检索词有岐义";  break;
+            case BMK_SEARCH_AMBIGUOUS_ROURE_ADDR:  errorInfo = @"检索地址有岐义";  break;
+            case BMK_SEARCH_RESULT_NOT_FOUND:  errorInfo = @"没有找到检索结果";  break;
+            case BMK_SEARCH_ST_EN_TOO_NEAR:  errorInfo = @"起终点太近";  break;
+            default:    errorInfo = @"服务器错误";   break;
+        }
+        [JDOUtils showHUDText:errorInfo inView:self.view];
+        return;
+    }
+    
+    [_list removeAllObjects];
+    [_plans removeAllObjects];
+    for (int i=0; i<result.routes.count; i++) {
+        BMKTransitRouteLine *plan = (BMKTransitRouteLine *)result.routes[i];
+        [_plans addObject:plan];
+        JDOInterChangeModel *model = [JDOInterChangeModel new];
+        [_list addObject:model];
+        
+        if (plan.distance>999) {    //%.Ng代表N位有效数字(包括小数点前面的)，%.Nf代表N位小数位
+            model.distance = [NSString stringWithFormat:@"%.1f公里",plan.distance/1000.0f];
+        }else{
+            model.distance = [NSString stringWithFormat:@"%d米",plan.distance];
+        }
+        if (plan.duration.hours!=0) {
+            model.duration = [NSString stringWithFormat:@"%d小时%d分",plan.duration.hours,plan.duration.minutes];
+        }else{
+            model.duration = [NSString stringWithFormat:@"%d分钟",plan.duration.minutes];
+        }
+        
+        int busChangeNum=0;
+        for (int j=0; j<plan.steps.count; j++) {
+            BMKTransitStep *aStep = plan.steps[j];
+            if (aStep.stepType == BMK_BUSLINE) {
+                busChangeNum++;
+                NSString *busName = aStep.vehicleInfo.title;
+                int stationNumber = aStep.vehicleInfo.passStationNum;
+                if (model.busChangeInfo == nil) {
+                    model.busChangeInfo = [NSMutableString stringWithString:busName];
+                }else{
+                    [model.busChangeInfo appendFormat:@" -> %@",busName];
+                }
+                model.busStationNumber += stationNumber;
+            }
+        }
+        model.type = busChangeNum>1?1:0;    // 0:直达,1:转乘
+    }
+    [self.tableView reloadData];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (tableView == _tableView) {
 //        [self performSegueWithIdentifier:@"toRouteMap" sender:indexPath];
     }else if(tableView == _dropDown1){
-//        _startPoi = _locations1[indexPath.row];
-//        _startField.text = _startPoi.name;
+        _startPoi = _locations1[indexPath.row];
+        _startField.text = _startPoi.name;
         [_startField resignFirstResponder];
     }else if(tableView == _dropDown2){
-//        _endPoi = _locations2[indexPath.row];
-//        _endField.text = _endPoi.name;
+        _endPoi = _locations2[indexPath.row];
+        _endField.text = _endPoi.name;
         [_endField resignFirstResponder];
     }
 }
@@ -438,22 +445,22 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"toRouteMap"]) {
         JDORouteMapController *controller = segue.destinationViewController;
-//        int index = [(NSIndexPath *)sender row];
-//        int index = [_tableView indexPathForCell:(JDOInterChangeCell *)sender].row;
-//        controller.route = _plans[index];
-//        JDOInterChangeModel *model = _list[index];
-//        controller.lineTitle = model.busChangeInfo;
+//        NSInteger index = [(NSIndexPath *)sender row];
+        NSInteger index = [_tableView indexPathForCell:(JDOInterChangeCell *)sender].row;
+        controller.route = _plans[index];
+        JDOInterChangeModel *model = _list[index];
+        controller.lineTitle = model.busChangeInfo;
     }else if([segue.identifier isEqualToString:@"toLocationMap"]){
         JDOLocationMapController *controller = segue.destinationViewController;
         controller.parentVC = self;
         if (sender == _startBtn) {
             controller.startOrEnd = 0;
-//            controller.initialPoi = _startPoi;
-//            [controller.navigationBar.items[0] setTitle:@"请选择起点"];
+            controller.initialPoi = _startPoi;
+            [controller.navigationBar.items[0] setTitle:@"请选择起点"];
         }else{
             controller.startOrEnd = 1;
-//            controller.initialPoi = _endPoi;
-//            [controller.navigationBar.items[0] setTitle:@"请选择终点"];
+            controller.initialPoi = _endPoi;
+            [controller.navigationBar.items[0] setTitle:@"请选择终点"];
         }
     }
 }

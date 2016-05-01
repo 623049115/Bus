@@ -36,45 +36,45 @@ CGFloat TBScaledValueForValue(CGFloat value)
 
 @implementation TBClusterAnnotationView
 
-//- (id)initWithAnnotation:(id<BMKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier
-//{
-//    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
-//    if (self) {
-//        self.backgroundColor = [UIColor clearColor];
-//        [self setupLabel];
-//        [self setCount:1];
-//    }
-//    return self;
-//}
+- (id)initWithAnnotation:(id<BMKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        [self setupLabel];
+        [self setCount:1];
+    }
+    return self;
+}
 //
-//- (void)setupLabel
-//{
-//    _countLabel = [[UILabel alloc] initWithFrame:self.frame];
-//    _countLabel.backgroundColor = [UIColor clearColor];
-//    _countLabel.textColor = [UIColor whiteColor];
-//    _countLabel.textAlignment = NSTextAlignmentCenter;
-////    _countLabel.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.75];
-////    _countLabel.shadowOffset = CGSizeMake(0, -1);
-//    _countLabel.adjustsFontSizeToFitWidth = YES;
-//    _countLabel.numberOfLines = 1;
-//    _countLabel.font = [UIFont boldSystemFontOfSize:12];
-//    _countLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-//    [self addSubview:_countLabel];
-//}
+- (void)setupLabel
+{
+    _countLabel = [[UILabel alloc] initWithFrame:self.frame];
+    _countLabel.backgroundColor = [UIColor clearColor];
+    _countLabel.textColor = [UIColor whiteColor];
+    _countLabel.textAlignment = NSTextAlignmentCenter;
+//    _countLabel.shadowColor = [UIColor colorWithWhite:0.0 alpha:0.75];
+//    _countLabel.shadowOffset = CGSizeMake(0, -1);
+    _countLabel.adjustsFontSizeToFitWidth = YES;
+    _countLabel.numberOfLines = 1;
+    _countLabel.font = [UIFont boldSystemFontOfSize:12];
+    _countLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    [self addSubview:_countLabel];
+}
 //
-//- (void)setCount:(NSUInteger)count
-//{
-//    _count = count;
-//
-//    CGRect newBounds = CGRectMake(0, 0, roundf(44 * TBScaledValueForValue(count)), roundf(44 * TBScaledValueForValue(count)));
-//    self.frame = TBCenterRect(newBounds, self.center);
-//
-//    CGRect newLabelBounds = CGRectMake(0, 0, newBounds.size.width / 1.3, newBounds.size.height / 1.3);
-//    self.countLabel.frame = TBCenterRect(newLabelBounds, TBRectCenter(newBounds));
-//    self.countLabel.text = [@(_count) stringValue];
-//
-//    [self setNeedsDisplay];
-//}
+- (void)setCount:(NSUInteger)count
+{
+    _count = count;
+
+    CGRect newBounds = CGRectMake(0, 0, roundf(44 * TBScaledValueForValue(count)), roundf(44 * TBScaledValueForValue(count)));
+    self.frame = TBCenterRect(newBounds, self.center);
+
+    CGRect newLabelBounds = CGRectMake(0, 0, newBounds.size.width / 1.3, newBounds.size.height / 1.3);
+    self.countLabel.frame = TBCenterRect(newLabelBounds, TBRectCenter(newBounds));
+    self.countLabel.text = [@(_count) stringValue];
+
+    [self setNeedsDisplay];
+}
 
 - (void)drawRect:(CGRect)rect
 {

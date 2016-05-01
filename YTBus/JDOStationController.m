@@ -53,15 +53,17 @@
     [_clearHisBtn setTitleEdgeInsets:UIEdgeInsetsMake(-8, 0, 0, 0)];
     [_clearHisBtn addTarget:self action:@selector(clearHistory:) forControlEvents:UIControlEventTouchUpInside];
     
-    _db = [JDODatabase sharedDB];
-    if (_db) {
-        [self loadData];
-    }else{
-        dbObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"db_finished" object:nil queue:nil usingBlock:^(NSNotification *note) {
-            _db = [JDODatabase sharedDB];
-            [self loadData];
-        }];
-    }
+//    _db = [JDODatabase sharedDB];
+//    if (_db) {
+//        [self loadData];
+//    }else{
+//        dbObserver = [[NSNotificationCenter defaultCenter] addObserverForName:@"db_finished" object:nil queue:nil usingBlock:^(NSNotification *note) {
+//            _db = [JDODatabase sharedDB];
+//            [self loadData];
+//        }];
+//    }
+    
+    [self loadData];
     
     self.tableView.bounces = false;
     self.tableView.backgroundColor = [UIColor colorWithHex:@"dfded9"];
@@ -90,7 +92,24 @@
 
 - (void)loadData{
     // 加载所有站点
-    _allStations = [NSMutableArray new];
+    _allStations = [[NSMutableArray alloc] init];
+    NSString *stationPath = [[NSBundle mainBundle] pathForResource:@"yc_bus_station_list" ofType:@"plist"];
+    NSArray *stationArray = [NSArray arrayWithContentsOfFile:stationPath];
+    for (int i = 0; i < stationArray.count; i++) {
+        JDOStationModel *stationModel = [[JDOStationModel alloc] init];
+        NSDictionary *stationInfo = stationArray[i];
+        stationModel.fid = stationInfo[@"stationId"];
+        stationModel.name = stationInfo[@"stationName"];
+        stationModel.passLineNum = (int)[stationInfo[@"buses"] count];
+        NSMutableArray *passLineNames = [[NSMutableArray alloc] init];
+        for (int j = 0; j < stationModel.passLineNum; j++) {
+            [passLineNames addObject:[NSString stringWithFormat:@"%@路",stationInfo[@"buses"][j]]];
+        }
+        stationModel.passLinesName = passLineNames;
+        [_allStations addObject:stationModel];
+    }
+    
+#if 0
     FMResultSet *rs = [_db executeQuery:GetAllStationsWithLine];
     JDOStationModel *preStation;
     while ([rs next]) {
@@ -127,6 +146,7 @@
         self.tableView.tableFooterView = _clearHisBtn;
         [self.tableView reloadData];
     }
+#endif
 }
 
 #pragma mark - Navigation
@@ -241,9 +261,21 @@
     
     cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"表格圆角中"]];
     return cell;
+    
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (_filterAllStations.count <= indexPath.row) {
+        return;
+    }
+    if ([self.delegate respondsToSelector:@selector(jdoStationControllerDidSelectedStation:)]) {
+        [self.delegate jdoStationControllerDidSelectedStation:_filterAllStations[indexPath.row]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+}
 
+#pragma mark- UISearchBarDelegate
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     if ([JDOUtils isEmptyString:_searchBar.text]) {
         if (_historyStations.count>0) {

@@ -8,9 +8,9 @@
 
 //#import "BMKAnnotationView.h"
 #import <UIKit/UIKit.h>
+#import <BaiduMapAPI_Map/BMKAnnotationView.h>
 
-
-@interface TBClusterAnnotationView :NSObject
+@interface TBClusterAnnotationView :BMKAnnotationView
 
 @property (assign, nonatomic) NSUInteger count;
 @property (nonatomic,strong) UIColor *markerColor;

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "JDOStationModel.h"
+#import <BaiduMapAPI_Location/BMKLocationComponent.h>
+#import <BaiduMapAPI_Search/BMKPoiSearch.h>
+#import <BaiduMapAPI_Search/BMKBusLineSearchOption.h>
+
 
 @interface JDOStationMapController : UIViewController
 

@@ -8,7 +8,6 @@
 
 #import "JDOStationMapController.h"
 #import "JDODatabase.h"
-#import "JDOStationModel.h"
 #import "JDOBusLine.h"
 #import "JDOBusLineDetail.h"
 #import "JDOStationAnnotation.h"
@@ -16,38 +15,40 @@
 #import "JDOConstants.h"
 #import "AppDelegate.h"
 #import <objc/runtime.h>
-
+#import "JDOStationController.h"
 #import "TBCoordinateQuadTree.h"
 #import "TBClusterAnnotationView.h"
 #import "TBClusterAnnotation.h"
 
+#import <BaiduMapAPI_Search/BMKSearchComponent.h>
+
 #define PaoPaoLineHeight 35
 
 static const void *LabelKey = &LabelKey;
-//
-//@interface BMKGeoCodeSearch (JDOCategory)
-//
-//@property (nonatomic,retain) UILabel *titleLabel;
-//
-//@end
-//
-//@implementation BMKGeoCodeSearch (JDOCategory)
-//
-//@dynamic titleLabel;
-//
-//- (UILabel *)titleLabel {
-//    return objc_getAssociatedObject(self, LabelKey);
-//}
-//
-//- (void)setTitleLabel:(UILabel *)titleLabel{
-//    objc_setAssociatedObject(self, LabelKey, titleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//}
-//
-//@end
+
+@interface BMKGeoCodeSearch (JDOCategory)
+
+@property (nonatomic,retain) UILabel *titleLabel;
+
+@end
+
+@implementation BMKGeoCodeSearch (JDOCategory)
+
+@dynamic titleLabel;
+
+- (UILabel *)titleLabel {
+    return objc_getAssociatedObject(self, LabelKey);
+}
+
+- (void)setTitleLabel:(UILabel *)titleLabel{
+    objc_setAssociatedObject(self, LabelKey, titleLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+@end
 
 @interface JDOPaoPaoTable2 : UITableView
 
-@property (nonatomic,strong) NSArray *stations;
+@property (nonatomic,strong) NSArray *lines;
 
 @end
 
@@ -55,7 +56,7 @@ static const void *LabelKey = &LabelKey;
 
 @end
 
-@interface JDOStationMapController () <UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,BMKMapViewDelegate>
+@interface JDOStationMapController () <UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKPoiSearchDelegate,BMKGeoCodeSearchDelegate,JDOStationControllerDelegate>
 
 @property (nonatomic,assign) IBOutlet BMKMapView *mapView;
 @property (nonatomic,assign) IBOutlet UITableView *tableView;
@@ -65,9 +66,14 @@ static const void *LabelKey = &LabelKey;
 @property (nonatomic,assign) IBOutlet UIButton *closeBtn;
 @property (nonatomic,strong) TBCoordinateQuadTree *coordinateQuadTree;
 
+@property (nonatomic,strong) BMKLocationService *locationService;
+@property (nonatomic,strong) BMKPoiSearch *poiSearch;
+@property (nonatomic,strong) TBClusterAnnotation *selectedAnnotation;
+@property (nonatomic,strong) NSArray *annotations;
+
 @end
 
-@implementation JDOStationMapController{
+@implementation JDOStationMapController {
     FMDatabase *_db;
     NSMutableArray *_stations;
     NSIndexPath *selectedIndexPath;
@@ -76,8 +82,22 @@ static const void *LabelKey = &LabelKey;
     NSMutableArray *combinedStations;
 }
 
-#pragma mark - life cycle
+#pragma mark - getter
+- (BMKLocationService *)locationService {
+    if (!_locationService) {
+        _locationService = [[BMKLocationService alloc] init];
+    }
+    return _locationService;
+}
 
+- (BMKPoiSearch *)poiSearch {
+    if (!_poiSearch) {
+        _poiSearch = [[BMKPoiSearch alloc] init];
+    }
+    return _poiSearch;
+}
+
+#pragma mark - life cycle
 - (void)dealloc {
     if (_mapView) {
         _mapView = nil;
@@ -87,7 +107,6 @@ static const void *LabelKey = &LabelKey;
 - (void)viewDidLoad {
     [super viewDidLoad];
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
 
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.bounces = true;
@@ -100,42 +119,46 @@ static const void *LabelKey = &LabelKey;
     [self.busMonitor addTarget:self action:@selector(switchMonitor) forControlEvents:UIControlEventValueChanged];
     rightBtnIsSearch = true;
     
+    _mapView.centerCoordinate = CLLocationCoordinate2DMake(30.6976020000,111.2929710000);
+    _mapView.zoomLevel = 13;
+    
+    self.coordinateQuadTree = [[TBCoordinateQuadTree alloc] init];
+    
     [self addCustomGestures];
     
+    [self loadAllStations];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [self.mapView viewWillAppear];
     self.mapView.delegate = self;
+    [self customLocationAccuracyCircle];
+    _mapView.userTrackingMode = BMKUserTrackingModeNone;//设置定位模式
+    //搜索公交站点
+//    self.poiSearch.delegate = self;
+//    [self searchBusPoint];
     
-    if (self.selectedStation) {
-        [self showLineView];
-    }
+    //定位
+//    self.locationService.delegate = self;
+//    [self startLocation];
+//
+//
+//    if (self.selectedStation) {
+//        [self showLineView];
+//    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
     [self.mapView viewWillDisappear];
     self.mapView.delegate = nil;
     
-}
-
-#pragma mark - BMKMapViewDelegate
-- (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"BMKMapView控件初始化完成" delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
-//    [alert show];
-//    alert = nil;
-}
-
-- (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
-    NSLog(@"map view: click blank");
-}
-
-- (void)mapview:(BMKMapView *)mapView onDoubleClick:(CLLocationCoordinate2D)coordinate {
-    NSLog(@"map view: double click");
+    self.poiSearch.delegate = nil;
+    
+//    self.locationService.delegate = nil;
+//    [self stopLocation];
 }
 
 #pragma mark - 添加自定义的手势（若不自定义手势，不需要下面的代码）
-
 - (void)addCustomGestures {
     /*
      *注意：
@@ -168,6 +191,7 @@ static const void *LabelKey = &LabelKey;
      *do something
      */
     NSLog(@"my handleSingleTap");
+    [self closeLineView];
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)theDoubleTap {
@@ -177,55 +201,186 @@ static const void *LabelKey = &LabelKey;
     NSLog(@"my handleDoubleTap");
 }
 
-#pragma mark- private
-- (void) searchOrClear:(id)sender {
-    if (rightBtnIsSearch) {
-        self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"地图-清除"];
-    }else{
-        self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"地图-搜索"];
-    }
-    rightBtnIsSearch = !rightBtnIsSearch;
+#pragma mark - BMKLocationServiceDelegate
+/**
+ *在地图View将要启动定位时，会调用此函数
+ *@param mapView 地图View
+ */
+- (void)willStartLocatingUser
+{
+    NSLog(@"start locate");
 }
 
-- (void)loadData2{
-    FMResultSet *rs = [_db executeQuery:GetAllStationsInfo];
-    while ([rs next]) {
-        JDOStationModel *station = [JDOStationModel new];
-        station.fid = [rs stringForColumn:@"STATIONID"];
-        station.name = [NSString stringWithFormat:@"%@[%@]",[rs stringForColumn:@"STATIONNAME"],[rs stringForColumn:@"DIRECTION"]];
-        station.gpsX = [NSNumber numberWithDouble:[rs doubleForColumn:@"GPSX"]];
-        station.gpsY = [NSNumber numberWithDouble:[rs doubleForColumn:@"GPSY"]];
-        station.attach = [rs intForColumn:@"ATTACH"];
-        [_stations addObject:station];
-    }
-    [rs close];
-    // Mark:合并站点
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSMutableDictionary *sameIdStationMap = delegate.sameIdStationMap;
-    NSMutableDictionary *sameNameStationMap = delegate.sameNameStationMap;
-    combinedStations = [NSMutableArray new];
-    for (int i=0; i<_stations.count; i++) {
-        JDOStationModel *station = _stations[i];
-        JDOStationModel *mapStation1 = (JDOStationModel *)[sameIdStationMap objectForKey:station.fid];
-        JDOStationModel *mapStation2 = (JDOStationModel *)[sameNameStationMap objectForKey:station.name];
-        if (mapStation1) {
-            if (station.attach == mapStation1.attach) {
-                station.linkStations = [mapStation1.linkStations mutableCopy];
-                [combinedStations addObject:station];
-            }
-        }else if(mapStation2){
-            if (station.attach == mapStation2.attach) {
-                station.linkStations = [mapStation2.linkStations mutableCopy];
-                [combinedStations addObject:station];
-            }
-        }else{  // 未映射的站点直接添加
-            [combinedStations addObject:station];
+/**
+ *用户方向更新后，会调用此函数
+ *@param userLocation 新的用户位置
+ */
+- (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
+{
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:userLocation.location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        
+        if (placemarks.count > 0) {
+            CLPlacemark *placemark = placemarks[0];
+            userLocation.title = placemark.name;
+            [_mapView updateLocationData:userLocation];
+            _mapView.centerCoordinate = userLocation.location.coordinate;
+            [self stopLocation];
         }
+    }];
+
+    NSLog(@"heading is %@",userLocation.heading);
+}
+
+/**
+ *用户位置更新后，会调用此函数
+ *@param userLocation 新的用户位置
+ */
+- (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
+{
+    NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:userLocation.location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+
+        if (placemarks.count > 0) {
+            CLPlacemark *placemark = placemarks[0];
+            userLocation.title = placemark.name;
+            [_mapView updateLocationData:userLocation];
+            _mapView.centerCoordinate = userLocation.location.coordinate;
+            [self stopLocation];
+        }
+    }];
+
+}
+
+/**
+ *在地图View停止定位后，会调用此函数
+ *@param mapView 地图View
+ */
+- (void)didStopLocatingUser
+{
+    NSLog(@"stop locate");
+}
+
+/**
+ *定位失败后，会调用此函数
+ *@param mapView 地图View
+ *@param error 错误号，参考CLError.h中定义的错误号
+ */
+- (void)didFailToLocateUserWithError:(NSError *)error
+{
+    NSLog(@"location error");
+}
+
+
+#pragma mark implement BMKSearchDelegate
+- (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult*)result errorCode:(BMKSearchErrorCode)error
+{
+    // 清楚屏幕中所有的annotation
+//    NSArray* array = [NSArray arrayWithArray:_mapView.annotations];
+//    [_mapView removeAnnotations:array];
+//    
+//    if (error == BMK_SEARCH_NO_ERROR) {
+//        NSMutableArray *annotations = [NSMutableArray array];
+//        for (int i = 0; i < result.poiInfoList.count; i++) {
+//            BMKPoiInfo* poi = [result.poiInfoList objectAtIndex:i];
+//            BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
+//            item.coordinate = poi.pt;
+//            item.title = poi.name;
+//            [annotations addObject:item];
+//            NSLog(@"------>%@",poi.name);
+//        }
+//        [_mapView addAnnotations:annotations];
+//        [_mapView showAnnotations:annotations animated:YES];
+//    } else if (error == BMK_SEARCH_AMBIGUOUS_ROURE_ADDR){
+//        NSLog(@"起始点有歧义");
+//    } else {
+//        // 各种情况的判断。。。
+//    }
+}
+
+#pragma mark - BMKMapViewDelegate
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation
+{
+    static NSString *const TBAnnotatioViewReuseID = @"TBAnnotatioViewReuseID";
+    
+    TBClusterAnnotationView *annotationView = (TBClusterAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:TBAnnotatioViewReuseID];
+    
+    if (!annotationView) {
+        annotationView = [[TBClusterAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:TBAnnotatioViewReuseID];
     }
     
-    [self.coordinateQuadTree buildTree:combinedStations];
-    [_stations removeAllObjects];
-    [combinedStations removeAllObjects];
+    
+    TBClusterAnnotation *ca = (TBClusterAnnotation *)annotation;
+    annotationView.count = ca.count;
+    annotationView.canShowCallout = true;
+//    if (ca.stations.count == 0) {
+//        ca.title = [NSString stringWithFormat:@"%ld个站点,放大可显示详情",(long)ca.count];
+//    }else
+    if(ca.stations.count ==1) {
+        JDOStationModel *station = ca.stations[0];
+        ca.title = station.name;
+        ca.coordinate = CLLocationCoordinate2DMake([station.gpsY doubleValue], [station.gpsX  doubleValue]);
+    }
+    //else{
+//        annotationView.paopaoView = [self createPaoPaoView:ca.stations];
+//    }
+    
+    annotationView.annotation = annotation;
+    
+    return annotationView;
+}
+
+//- (BMKActionPaopaoView *)createPaoPaoView:(NSArray *)paopaoLines{
+//    float tableHeight = paopaoLines.count*PaoPaoLineHeight;
+//    // 计算最长的站点名称宽度
+//    float tableWidth = 0;
+//    for (int i=0; i<paopaoLines.count; i++) {
+//        NSDictionary *station = paopaoLines[i];
+//        float width = [station[@"stationName"] sizeWithFont:[UIFont systemFontOfSize:14] forWidth:MAXFLOAT lineBreakMode:NSLineBreakByWordWrapping].width;
+//        tableWidth = MAX(tableWidth, width+10);
+//    }
+//    tableWidth = MAX(tableWidth,140);
+//    
+//    UIView *customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableWidth, 35+tableHeight+12)];
+//    UIImageView *header = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tableWidth, 35)];
+//    header.image = [UIImage imageNamed:@"弹出列表01"];
+//    [customView addSubview:header];
+//    
+//    UILabel *title = [[UILabel alloc] initWithFrame:header.bounds];
+//    title.backgroundColor = [UIColor clearColor];   // iOS7以下label背景色为白色，以上为透明
+//    title.font = [UIFont boldSystemFontOfSize:15];
+//    title.minimumFontSize = 12;
+//    title.adjustsFontSizeToFitWidth = true;
+//    title.textColor = [UIColor whiteColor];
+//    title.textAlignment = NSTextAlignmentCenter;
+//    title.tag = 8001;
+//    //    title.text = @"正在获取位置";
+//    [customView addSubview:title];
+//    
+//    UIImageView *footer = [[UIImageView alloc] initWithFrame:CGRectMake(0, 35+tableHeight+12-51, tableWidth, 51)];
+//    footer.image = [UIImage imageNamed:@"弹出列表04"];
+//    [customView addSubview:footer];
+//    
+//    JDOPaoPaoTable2 *paopaoTable = [[JDOPaoPaoTable2 alloc] initWithFrame:CGRectMake(0, 35, tableWidth, tableHeight)];
+//    paopaoTable.stations = paopaoLines;
+//    paopaoTable.rowHeight = PaoPaoLineHeight;
+//    paopaoTable.bounces = false;
+//    paopaoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    paopaoTable.delegate = self;
+//    paopaoTable.dataSource = self;
+//    paopaoTable.tag = 8002;
+//    [customView addSubview:paopaoTable];
+//    
+//    BMKActionPaopaoView *paopaoView = [[BMKActionPaopaoView alloc] initWithCustomView:customView];
+//    return paopaoView;
+//}
+
+- (void)mapView:(BMKMapView *)mapView didAddAnnotationViews:(NSArray *)views
+{
+    for (UIView *view in views) {
+        [self addBounceAnnimationToView:view];
+    }
 }
 
 - (void)addBounceAnnimationToView:(UIView *)view
@@ -247,24 +402,253 @@ static const void *LabelKey = &LabelKey;
 
 - (void)updateMapViewAnnotationsWithAnnotations:(NSArray *)annotations
 {
-//    NSMutableSet *before = [NSMutableSet setWithArray:self.mapView.annotations];
-////    [before removeObject:[self.mapView userLocation]];
-//    NSSet *after = [NSSet setWithArray:annotations];
-//    
-//    NSMutableSet *toKeep = [NSMutableSet setWithSet:before];
-//    [toKeep intersectSet:after];
-//    
-//    NSMutableSet *toAdd = [NSMutableSet setWithSet:after];
-//    [toAdd minusSet:toKeep];
-//    
-//    NSMutableSet *toRemove = [NSMutableSet setWithSet:before];
-//    [toRemove minusSet:after];
-//    
-//    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-//        [self.mapView addAnnotations:[toAdd allObjects]];
-//        [self.mapView removeAnnotations:[toRemove allObjects]];
-//    }];
+    NSMutableSet *before = [NSMutableSet setWithArray:self.mapView.annotations];
+    //    [before removeObject:[self.mapView userLocation]];
+    NSSet *after = [NSSet setWithArray:annotations];
+    
+    NSMutableSet *toKeep = [NSMutableSet setWithSet:before];
+    [toKeep intersectSet:after];
+    
+    NSMutableSet *toAdd = [NSMutableSet setWithSet:after];
+    [toAdd minusSet:toKeep];
+    
+    NSMutableSet *toRemove = [NSMutableSet setWithSet:before];
+    [toRemove minusSet:after];
+    
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.mapView addAnnotations:[toAdd allObjects]];
+        [self.mapView removeAnnotations:[toRemove allObjects]];
+    }];
 }
+
+- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view{
+    TBClusterAnnotation *ca = (TBClusterAnnotation *)view.annotation;
+//
+//    if (ca.stations.count == 0) {
+//
+//    }else
+    if(ca.stations.count ==1) {
+        [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
+        // 若marker上只有一个站点，则不弹出paopaoView，直接打开线路列表
+        _selectedStation = ca.stations[0];
+        _selectedAnnotation = view.annotation;
+        [self showLineView];
+    }
+#if 0
+//    else{
+        // 选中某个marker后，将此marker移动到地图中心
+        [mapView setCenterCoordinate:view.annotation.coordinate animated:YES];
+
+        TBClusterAnnotationView *annotationView = (TBClusterAnnotationView *)view;
+        UIView *customView = [annotationView.paopaoView subviews][0];
+        UILabel *title = (UILabel *)[customView viewWithTag:8001];
+
+        // 多个站点的时候，取位置进行反地理编码填充表格头部
+        BMKReverseGeoCodeOption *reverseGeoCodeSearchOption = [[BMKReverseGeoCodeOption alloc] init];
+        reverseGeoCodeSearchOption.reverseGeoPoint = ca.coordinate;
+        BMKGeoCodeSearch *searcher =[[BMKGeoCodeSearch alloc] init];
+        searcher.delegate = self;
+        searcher.titleLabel = title;
+        BOOL flag = [searcher reverseGeoCode:reverseGeoCodeSearchOption];
+        if(!flag){
+            NSLog(@"反geo检索发送失败");
+        }
+        UITableView *tv = (UITableView *)[customView viewWithTag:8002];
+        [tv scrollsToTop];
+//    }
+#endif
+}
+
+
+#pragma mark - BMKGeoCodeSearchDelegate
+//接收反向地理编码结果
+-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result: (BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
+    if (error == BMK_SEARCH_NO_ERROR) {
+        //        if (result.poiList.count>0) {
+        //            searcher.titleLabel.text = [(BMKPoiInfo *)result.poiList[0] name];
+        //        }else{
+        searcher.titleLabel.text = [[result.addressDetail.district stringByAppendingString:result.addressDetail.streetName] stringByAppendingString:result.addressDetail.streetNumber];
+        //        }
+    }else{
+        searcher.titleLabel.text = @"无法获取位置信息";
+    }
+    searcher.delegate = nil;
+}
+
+#pragma mark- JDOStationControllerDelegate 
+- (void)jdoStationControllerDidSelectedStation:(JDOStationModel *)stationModel {
+    [self.annotations enumerateObjectsUsingBlock:^(TBClusterAnnotation *annotation, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([stationModel.name isEqualToString:((JDOStationModel *)annotation.stations[0]).name]) {
+            _selectedStation = stationModel;
+            _selectedAnnotation = annotation;
+            *stop = YES;
+            [self.mapView selectAnnotation:_selectedAnnotation animated:YES];
+            [self showLineView];
+        }
+    }];
+}
+#pragma mark- myPrivate
+//获得选中站点的个数
+- (NSInteger)getBusesCountWithStationId:(NSString *)stationId {
+    __block NSInteger count = 0;
+    [_stations enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([_selectedStation.fid isEqualToString:obj[@"stationId"]]) {
+            count = [obj[@"buses"] count];
+            *stop = YES;
+        }
+    }];
+    return count;
+
+}
+
+//获得路线
+- (NSDictionary *)getSelectedStationLineWithIdx:(NSInteger)index {
+    
+    NSString *busPath = [[NSBundle mainBundle] pathForResource:@"yc_bus_list" ofType:@"plist"];
+    NSArray *buses = [NSArray arrayWithContentsOfFile:busPath];
+    
+    __block NSArray *lines;
+    
+    [_stations enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([_selectedStation.fid isEqualToString:obj[@"stationId"]]) {
+            lines = obj[@"buses"];
+            *stop = YES;
+        }
+    }];
+    
+    if (!lines) {
+        return nil;
+    }
+    
+    __block NSDictionary *route = [NSDictionary dictionary];
+    [buses enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([lines[index] isEqualToString:obj[@"routeId"]]) {
+            route = obj;
+            *stop = YES;
+        }
+    }];
+    
+    return route;
+}
+
+//添加大头针
+-(void)addStationAnnotation {
+    for (int i=0; i<_stations.count; i++) {
+        NSDictionary *station = _stations[i];
+        JDOStationAnnotation *annotation = [[JDOStationAnnotation alloc] init];
+        annotation.coordinate = CLLocationCoordinate2DMake([station[@"lat"] doubleValue], [station[@"lon"] doubleValue]);
+        annotation.station = station;
+        annotation.selected = (i==0);
+        annotation.index = i+1;
+        annotation.title = @""; //didSelectAnnotationView回调触发必须设置title，设置title后若不想弹出paopao，只能设置空customView
+        [_mapView addAnnotation:annotation];
+    }
+}
+
+//加载所有站点
+- (void)loadAllStations {
+    NSString *stationsPath = [[NSBundle mainBundle] pathForResource:@"yc_bus_station_list" ofType:@"plist"];
+    NSArray *stationArray = [NSArray arrayWithContentsOfFile:stationsPath];
+    
+    _stations = [NSMutableArray arrayWithArray:stationArray];
+    [self.coordinateQuadTree buildTree:_stations];
+//    [_stations removeAllObjects];
+    
+    self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:_mapView];
+    [self updateMapViewAnnotationsWithAnnotations:self.annotations];
+}
+
+//搜索公交站点
+- (void)searchBusPoint {
+    BMKCitySearchOption *option = [[BMKCitySearchOption alloc] init];
+    
+    option.city = @"宜昌市";
+    option.keyword = @"公交车站";
+    option.pageCapacity = 1;
+    option.pageIndex = 0;
+    BOOL flag = [self.poiSearch poiSearchInCity:option];
+    if (!flag) {
+        NSLog(@"城市内检索发生失败！");
+    }
+    
+}
+
+//自定义精度圈
+- (void)customLocationAccuracyCircle {
+    BMKLocationViewDisplayParam *param = [[BMKLocationViewDisplayParam alloc] init];
+    param.accuracyCircleStrokeColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    param.accuracyCircleFillColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.3];
+    [_mapView updateLocationViewWithParam:param];
+}
+
+//普通态
+-(void)startLocation
+{
+    NSLog(@"进入普通定位态");
+    _mapView.showsUserLocation = NO;//先关闭显示的定位图层
+    [self.locationService startUserLocationService];
+    _mapView.showsUserLocation = YES;//显示定位图层
+}
+
+//停止定位
+-(void)stopLocation
+{
+    [self.locationService stopUserLocationService];
+//    _mapView.showsUserLocation = NO;
+}
+
+#pragma mark - private
+- (void) searchOrClear:(id)sender {
+    if (rightBtnIsSearch) {
+        self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"地图-清除"];
+    }else{
+        self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"地图-搜索"];
+    }
+    rightBtnIsSearch = !rightBtnIsSearch;
+}
+
+- (void)loadData2{
+//    FMResultSet *rs = [_db executeQuery:GetAllStationsInfo];
+//    while ([rs next]) {
+//        JDOStationModel *station = [JDOStationModel new];
+//        station.fid = [rs stringForColumn:@"STATIONID"];
+//        station.name = [NSString stringWithFormat:@"%@[%@]",[rs stringForColumn:@"STATIONNAME"],[rs stringForColumn:@"DIRECTION"]];
+//        station.gpsX = [NSNumber numberWithDouble:[rs doubleForColumn:@"GPSX"]];
+//        station.gpsY = [NSNumber numberWithDouble:[rs doubleForColumn:@"GPSY"]];
+//        station.attach = [rs intForColumn:@"ATTACH"];
+//        [_stations addObject:station];
+//    }
+//    [rs close];
+    // Mark:合并站点
+//    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    NSMutableDictionary *sameIdStationMap = delegate.sameIdStationMap;
+//    NSMutableDictionary *sameNameStationMap = delegate.sameNameStationMap;
+//    for (int i=0; i<_stations.count; i++) {
+//        JDOStationModel *station = _stations[i];
+//        JDOStationModel *mapStation1 = (JDOStationModel *)[sameIdStationMap objectForKey:station.fid];
+//        JDOStationModel *mapStation2 = (JDOStationModel *)[sameNameStationMap objectForKey:station.name];
+//        if (mapStation1) {
+//            if (station.attach == mapStation1.attach) {
+//                station.linkStations = [mapStation1.linkStations mutableCopy];
+//                [combinedStations addObject:station];
+//            }
+//        }else if(mapStation2){
+//            if (station.attach == mapStation2.attach) {
+//                station.linkStations = [mapStation2.linkStations mutableCopy];
+//                [combinedStations addObject:station];
+//            }
+//        }else{  // 未映射的站点直接添加
+//            [combinedStations addObject:station];
+//        }
+//    }
+//
+    combinedStations = [NSMutableArray new];
+    
+    [self.coordinateQuadTree buildTree:combinedStations];
+    [_stations removeAllObjects];
+    [combinedStations removeAllObjects];
+}
+
 
 //- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 //{
@@ -309,7 +693,7 @@ static const void *LabelKey = &LabelKey;
 //    }
 //}
 //
-////接收反向地理编码结果
+//接收反向地理编码结果
 //-(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result: (BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
 //    if (error == BMK_SEARCH_NO_ERROR) {
 ////        if (result.poiList.count>0) {
@@ -323,147 +707,70 @@ static const void *LabelKey = &LabelKey;
 //    searcher.delegate = nil;
 //}
 //
-//- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation
-//{
-//    static NSString *const TBAnnotatioViewReuseID = @"TBAnnotatioViewReuseID";
-//    
-//    TBClusterAnnotationView *annotationView = (TBClusterAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:TBAnnotatioViewReuseID];
-//    
-//    if (!annotationView) {
-//        annotationView = [[TBClusterAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:TBAnnotatioViewReuseID];
-//    }else{
-//        annotationView.annotation = annotation;
-//        annotationView.markerColor = nil;
-//    }
-//    
-//    TBClusterAnnotation *ca = (TBClusterAnnotation *)annotation;
-//    annotationView.count = ca.count;
-//    annotationView.canShowCallout = true;
-//    if (ca.stations.count == 0) {
-//        ca.title = [NSString stringWithFormat:@"%ld个站点,放大可显示详情",(long)ca.count];
-//    }else if(ca.stations.count ==1) {
-////        annotationView.paopaoView = [[BMKActionPaopaoView alloc] initWithCustomView:[[UIView alloc] initWithFrame:CGRectZero]];
-//        JDOStationModel *station = ca.stations[0];
-//        ca.title = station.name;
-////        if ([station.fid isEqualToString:self.selectedStation.fid]) {
-////            annotationView.markerColor = [UIColor orangeColor];
-////        }
-//    }else{
-//        annotationView.paopaoView = [self createPaoPaoView:ca.stations];
-//    }
-//    
-//    return annotationView;
-//}
+
 //
-//- (BMKActionPaopaoView *)createPaoPaoView:(NSArray *)paopaoLines{
-//    float tableHeight = paopaoLines.count*PaoPaoLineHeight;
-//    // 计算最长的站点名称宽度
-//    float tableWidth = 0;
-//    for (int i=0; i<paopaoLines.count; i++) {
-//        JDOStationModel *station = paopaoLines[i];
-//        float width = [station.name sizeWithFont:[UIFont systemFontOfSize:14] forWidth:MAXFLOAT lineBreakMode:NSLineBreakByWordWrapping].width;
-//        tableWidth = MAX(tableWidth, width+10);
-//    }
-//    tableWidth = MAX(tableWidth,140);
-//    
-//    UIView *customView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableWidth, 35+tableHeight+12)];
-//    UIImageView *header = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, tableWidth, 35)];
-//    header.image = [UIImage imageNamed:@"弹出列表01"];
-//    [customView addSubview:header];
-//    
-//    UILabel *title = [[UILabel alloc] initWithFrame:header.bounds];
-//    title.backgroundColor = [UIColor clearColor];   // iOS7以下label背景色为白色，以上为透明
-//    title.font = [UIFont boldSystemFontOfSize:15];
-//    title.minimumFontSize = 12;
-//    title.adjustsFontSizeToFitWidth = true;
-//    title.textColor = [UIColor whiteColor];
-//    title.textAlignment = NSTextAlignmentCenter;
-//    title.tag = 8001;
-////    title.text = @"正在获取位置";
-//    [customView addSubview:title];
-//    
-//    UIImageView *footer = [[UIImageView alloc] initWithFrame:CGRectMake(0, 35+tableHeight+12-51, tableWidth, 51)];
-//    footer.image = [UIImage imageNamed:@"弹出列表04"];
-//    [customView addSubview:footer];
-//    
-//    JDOPaoPaoTable2 *paopaoTable = [[JDOPaoPaoTable2 alloc] initWithFrame:CGRectMake(0, 35, tableWidth, tableHeight)];
-//    paopaoTable.stations = paopaoLines;
-//    paopaoTable.rowHeight = PaoPaoLineHeight;
-//    paopaoTable.bounces = false;
-//    paopaoTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    paopaoTable.delegate = self;
-//    paopaoTable.dataSource = self;
-//    paopaoTable.tag = 8002;
-//    [customView addSubview:paopaoTable];
-//    
-//    BMKActionPaopaoView *paopaoView = [[BMKActionPaopaoView alloc] initWithCustomView:customView];
-//    return paopaoView;
-//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([tableView isKindOfClass:[JDOPaoPaoTable2 class]]) {
-        JDOPaoPaoTable2 *paopaoTable = (JDOPaoPaoTable2 *)tableView;
-        return paopaoTable.stations.count;
-    }else{
-        return _selectedStation.passLines.count;
-    }
+//    if ([tableView isKindOfClass:[JDOPaoPaoTable2 class]]) {
+//        JDOPaoPaoTable2 *paopaoTable = (JDOPaoPaoTable2 *)tableView;
+//        return paopaoTable.lines.count;
+//    }else{
+        return [self getBusesCountWithStationId:_selectedStation.fid];
+//    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([tableView isKindOfClass:[JDOPaoPaoTable2 class]]) {
-        static NSString *lineIdentifier = @"lineIdentifier";
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:lineIdentifier];
-        if( cell == nil){
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:lineIdentifier];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-            UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(tableView.frame)-10, PaoPaoLineHeight)];
-            lineLabel.backgroundColor = [UIColor clearColor];
-            lineLabel.font = [UIFont systemFontOfSize:14];
-            lineLabel.minimumFontSize = 12;
-            lineLabel.numberOfLines = 1;
-            lineLabel.adjustsFontSizeToFitWidth = true;
-            lineLabel.textColor = [UIColor colorWithRed:110/255.0f green:110/255.0f blue:110/255.0f alpha:1];
-            lineLabel.tag = 3001;
-            [cell addSubview:lineLabel];
-        }
-        if (indexPath.row%2 == 0) {
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"弹出列表02"]];
-        }else{
-            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"弹出列表03"]];
-        }
-        
-        UILabel *lineLabel = (UILabel *)[cell viewWithTag:3001];
-        
-        JDOPaoPaoTable2 *paopaoTable = (JDOPaoPaoTable2 *)tableView;
-        NSArray *paopaoLines = paopaoTable.stations;
-        JDOStationModel *station = paopaoLines[indexPath.row];
-        lineLabel.text = station.name;
-        
-        return cell;
-    }else{
+//    if ([tableView isKindOfClass:[JDOPaoPaoTable2 class]]) {
+//        static NSString *lineIdentifier = @"lineIdentifier";
+//        
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:lineIdentifier];
+//        if( cell == nil){
+//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:lineIdentifier];
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            
+//            UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 0, CGRectGetWidth(tableView.frame)-10, PaoPaoLineHeight)];
+//            lineLabel.backgroundColor = [UIColor clearColor];
+//            lineLabel.font = [UIFont systemFontOfSize:14];
+//            lineLabel.minimumFontSize = 12;
+//            lineLabel.numberOfLines = 1;
+//            lineLabel.adjustsFontSizeToFitWidth = true;
+//            lineLabel.textColor = [UIColor colorWithRed:110/255.0f green:110/255.0f blue:110/255.0f alpha:1];
+//            lineLabel.tag = 3001;
+//            [cell addSubview:lineLabel];
+//        }
+//        if (indexPath.row%2 == 0) {
+//            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"弹出列表02"]];
+//        }else{
+//            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"弹出列表03"]];
+//        }
+//        
+//        UILabel *lineLabel = (UILabel *)[cell viewWithTag:3001];
+//        
+//        JDOPaoPaoTable2 *paopaoTable = (JDOPaoPaoTable2 *)tableView;
+//        NSArray *paopaoLines = paopaoTable.lines;
+//        NSDictionary *station = paopaoLines[indexPath.row];
+//        lineLabel.text = station[@"stationName"];
+//        
+//        return cell;
+//    }else{
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"stationLine"]; // forIndexPath:indexPath];
         if (indexPath.row%2==0) {
             cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"隔行1"]];
         }else{
             cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"隔行2"]];
         }
-        
-        JDOBusLine *busLine = _selectedStation.passLines[indexPath.row];
-        JDOBusLineDetail *lineDetail = busLine.lineDetailPair[0];
-        [(UILabel *)[cell viewWithTag:1001] setText:busLine.lineName];
-        [(UILabel *)[cell viewWithTag:1002] setText:lineDetail.lineDetail];
-//        [[cell viewWithTag:1003] setHidden:!self.busMonitor.on];
+    
+        NSDictionary *line = [self getSelectedStationLineWithIdx:indexPath.row];
+        [(UILabel *)[cell viewWithTag:1001] setText:line[@"routeName"]];
+        [(UILabel *)[cell viewWithTag:1002] setText:[NSString stringWithFormat:@"%@-%@",line[@"start"],line[@"end"]]];
         [[cell viewWithTag:1004] setHidden:(indexPath.row == _selectedStation.passLines.count-1)];  //最后一行不显示分割线
-        
         return cell;
-    }
+//    }
 }
 
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -490,12 +797,14 @@ static const void *LabelKey = &LabelKey;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([tableView isKindOfClass:[JDOPaoPaoTable2 class]]) {
         JDOPaoPaoTable2 *paopaoTable = (JDOPaoPaoTable2 *)tableView;
-        _selectedStation = [paopaoTable.stations objectAtIndex:indexPath.row];
+        _selectedStation = [paopaoTable.lines objectAtIndex:indexPath.row];
         [self showLineView];
     }
 }
 
 - (void) showLineView{
+    
+#if 0
     _selectedStation.passLines = [NSMutableArray new];
     // 根据站点id查询通过的线路，并实时刷新最近的车辆
     int count = 0;
@@ -567,18 +876,20 @@ static const void *LabelKey = &LabelKey;
             return [detail1.direction compare:detail2.direction];
         }];
     }
-
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+#endif
     
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+//    [self.tableView reloadData];
+//    
     self.stationLabel.text = _selectedStation.name;
-//    self.busMonitor.on = false;
-//    self.busMonitor.hidden = false;
     self.closeBtn.hidden = false;
     
+    NSInteger busCount = [self getBusesCountWithStationId:_selectedStation.fid];
+    
     [UIView animateWithDuration:0.25f animations:^{
-        float height = 56+36*MIN(count,4);
+        float height = 56+36*MIN(busCount,4);
         self.lineView.frame = CGRectMake(10, CGRectGetHeight(self.view.bounds)-height, 300, height);
-        self.tableView.frame = CGRectMake(0, 49, 300, 36*MIN(count,4));
+        self.tableView.frame = CGRectMake(0, 49, 300, 36*MIN(busCount,4));
     } completion:^(BOOL finished) {
         
     }];
@@ -593,6 +904,9 @@ static const void *LabelKey = &LabelKey;
 //        self.busMonitor.hidden = true;
         self.closeBtn.hidden = true;
     }];
+    
+    [self.mapView deselectAnnotation:_selectedAnnotation animated:YES];
+    self.selectedAnnotation = nil;
 }
 
 - (void)switchMonitor{
@@ -731,11 +1045,22 @@ static const void *LabelKey = &LabelKey;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"toRealtimeFromStation"]) {
         JDORealTimeController *rt = segue.destinationViewController;
-        JDOBusLine *busLine = _selectedStation.passLines[selectedIndexPath.row];
-        busLine.nearbyStationPair = [NSMutableArray arrayWithObject:_selectedStation];
+        
+        JDOBusLine *busLine = [[JDOBusLine alloc]init];
+        NSDictionary *line = [self getSelectedStationLineWithIdx:selectedIndexPath.row];
+        busLine.lineId = line[@"routeId"];
+        busLine.lineName = line[@"routeName"];
+        busLine.stationA = line[@"start"];
+        busLine.stationB = line[@"end"];
+        
         rt.busLine = busLine;
         rt.busLine.zhixian = busLine.zhixian;
         rt.busLine.attach = busLine.attach;
+    }
+    
+    if ([segue.identifier isEqualToString:@"toStationSearch"]) {
+        JDOStationController *stationController = segue.destinationViewController;
+        stationController.delegate = self;
     }
 }
 

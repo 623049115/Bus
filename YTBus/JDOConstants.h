@@ -21,10 +21,10 @@ typedef enum {
 } ViewStatusType;   //需要从网络加载的视图的几种状态变化
 
 // 当前站点范围121.23495  121.598595  37.341312   37.62461
-#define YT_MIN_X 121.1
-#define YT_MAX_X 121.7
-#define YT_MIN_Y 37.2
-#define YT_MAX_Y 37.7
+#define YT_MIN_X 110.15
+#define YT_MAX_X 112.04
+#define YT_MIN_Y 29.56
+#define YT_MAX_Y 31.34
 
 #define Main_Background_Color @"f0f0f0"
 #define URL_Request_Timeout 8.0f    //超时时间应该小于自动刷新时间，不然每次取消掉前面的connection就不能走didFinishConnection了

@@ -17,10 +17,10 @@ typedef struct JDOStationInfo {
     int attach;
 } JDOStationInfo;
 
-TBQuadTreeNodeData TBDataFromModel(JDOStationModel *station)
+TBQuadTreeNodeData TBDataFromModel(NSDictionary *station)
 {
-    double latitude = [station.gpsY doubleValue];
-    double longitude = [station.gpsX doubleValue];
+    double latitude = [station[@"lat"] doubleValue];
+    double longitude = [station[@"lon" ] doubleValue];
 
     JDOStationInfo* stationInfo = malloc(sizeof(JDOStationInfo));
 
@@ -33,19 +33,19 @@ TBQuadTreeNodeData TBDataFromModel(JDOStationModel *station)
 //    stationInfo->stationName = malloc(sizeof(char) * stationName.length + 1);
 //    strncpy(stationInfo->stationName, [stationName UTF8String], stationName.length + 1);
     
-    const char *stationId = [[station.fid stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] UTF8String];
+    const char *stationId = [[station[@"stationId"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] UTF8String];
     size_t stationIdLength = strlen(stationId) + 1;
     stationInfo->stationId = malloc(stationIdLength);
     memset(stationInfo->stationId, 0, stationIdLength);
     strncpy(stationInfo->stationId, stationId, stationIdLength);
     
-    const char *stationName = [[station.name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] UTF8String];
+    const char *stationName = [[station[@"stationName"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] UTF8String];
     size_t stationNameLength = strlen(stationName) + 1;
     stationInfo->stationName = malloc(stationNameLength);
     memset(stationInfo->stationName, 0, stationNameLength);
     strncpy(stationInfo->stationName, stationName, stationNameLength);
     
-    int attach = station.attach;
+    int attach = 1;
     stationInfo->attach = attach;
     
     return TBQuadTreeNodeDataMake(latitude, longitude, stationInfo);
@@ -116,90 +116,91 @@ TBQuadTreeNodeData TBDataFromModel(JDOStationModel *station)
     }
 }
 
-//- (NSArray *)clusteredAnnotationsWithinMapView:(BMKMapView *)mapView{
-//    double TBCellSize;
-//    if (mapView.zoomLevel < 13.0f) {
-//        TBCellSize = 0.06f;
-//    }else if(mapView.zoomLevel < 13.5f){
-//        TBCellSize = 0.04f;
-//    }else if(mapView.zoomLevel < 14.0f){
-//        TBCellSize = 0.025f;
-//    }else if(mapView.zoomLevel < 14.5f){
-//        TBCellSize = 0.016f;
-//    }else if(mapView.zoomLevel < 15.0f){
-//        TBCellSize = 0.012f;
-//    }else if(mapView.zoomLevel < 15.5f){
-//        TBCellSize = 0.008f;
-//    }else if(mapView.zoomLevel < 16.0f){
-//        TBCellSize = 0.006f;
-//    }else if(mapView.zoomLevel < 16.5f){
-//        TBCellSize = 0.004f;
-//    }else if(mapView.zoomLevel < 17.0f){
-//        TBCellSize = 0.003f;
-//    }else if(mapView.zoomLevel < 18.0f){
-//        TBCellSize = 0.002f;
-//    }else if(mapView.zoomLevel < 18.5f){
-//        TBCellSize = 0.001f;
-//    }else{
-//        TBCellSize = 0.0005f;
-//    }
-////    NSLog(@"level:%g,size:%g",mapView.zoomLevel,TBCellSize);
-//    
-//    double leftX = mapView.region.center.longitude - mapView.region.span.longitudeDelta/2;
-//    double rightX = mapView.region.center.longitude + mapView.region.span.longitudeDelta/2;
-//    double bottomY = mapView.region.center.latitude - mapView.region.span.latitudeDelta/2;
-//    double topY = mapView.region.center.latitude + mapView.region.span.latitudeDelta/2;
-//    
-//    double minX = YT_MIN_X, maxX = rightX, minY = bottomY, maxY = YT_MAX_Y;
-//    while (minX < leftX) {
-//        minX += TBCellSize;
-//    }
-//    minX -= TBCellSize;
-//    while (maxY > topY) {
-//        maxY -= TBCellSize;
-//    }
-//    maxY += TBCellSize;
-//    
-//    NSMutableArray *clusteredAnnotations = [[NSMutableArray alloc] init];
+- (NSArray *)clusteredAnnotationsWithinMapView:(BMKMapView *)mapView{
+    double TBCellSize;
+    if (mapView.zoomLevel < 13.0f) {
+        TBCellSize = 0.06f;
+    }else if(mapView.zoomLevel < 13.5f){
+        TBCellSize = 0.04f;
+    }else if(mapView.zoomLevel < 14.0f){
+        TBCellSize = 0.025f;
+    }else if(mapView.zoomLevel < 14.5f){
+        TBCellSize = 0.016f;
+    }else if(mapView.zoomLevel < 15.0f){
+        TBCellSize = 0.012f;
+    }else if(mapView.zoomLevel < 15.5f){
+        TBCellSize = 0.008f;
+    }else if(mapView.zoomLevel < 16.0f){
+        TBCellSize = 0.006f;
+    }else if(mapView.zoomLevel < 16.5f){
+        TBCellSize = 0.004f;
+    }else if(mapView.zoomLevel < 17.0f){
+        TBCellSize = 0.003f;
+    }else if(mapView.zoomLevel < 18.0f){
+        TBCellSize = 0.002f;
+    }else if(mapView.zoomLevel < 18.5f){
+        TBCellSize = 0.001f;
+    }else{
+        TBCellSize = 0.0005f;
+    }
+//    NSLog(@"level:%g,size:%g",mapView.zoomLevel,TBCellSize);
+    
+    double leftX = mapView.region.center.longitude - mapView.region.span.longitudeDelta/2;
+    double rightX = mapView.region.center.longitude + mapView.region.span.longitudeDelta/2;
+    double bottomY = mapView.region.center.latitude - mapView.region.span.latitudeDelta/2;
+    double topY = mapView.region.center.latitude + mapView.region.span.latitudeDelta/2;
+    
+    double minX = YT_MIN_X, maxX = rightX, minY = bottomY, maxY = YT_MAX_Y;
+    while (minX < leftX) {
+        minX += TBCellSize;
+    }
+    minX -= TBCellSize;
+    while (maxY > topY) {
+        maxY -= TBCellSize;
+    }
+    maxY += TBCellSize;
+    
+    NSMutableArray *clusteredAnnotations = [[NSMutableArray alloc] init];
 //    for (double x = minX; x <= maxX; x+=TBCellSize) {
 //        for (double y = maxY; y >= minY; y-=TBCellSize) {
-//            
-//            __block double totalX = 0;
-//            __block double totalY = 0;
+    double x = minX;
+    double y = maxY;
+            __block double totalX = 0;
+            __block double totalY = 0;
 //            __block int count = 0;
-//            
-//            NSMutableArray *stations = [[NSMutableArray alloc] initWithCapacity:6];
-//            TBQuadTreeGatherDataInRange(self.root, TBBoundingBoxMake(y-TBCellSize, x, y, x+TBCellSize), ^(TBQuadTreeNodeData data) {
+    
+            NSMutableArray *stations = [[NSMutableArray alloc] initWithCapacity:6];
+            TBQuadTreeGatherDataInRange(self.root, TBBoundingBoxMake(y-TBCellSize,x, y, x+TBCellSize), ^(TBQuadTreeNodeData data) {
 //                totalX += data.x;
 //                totalY += data.y;
 //                count++;
-//                
-//                if (count<=4) { //4个站点以下的集群，点击后以列表的形式显示
-//                    JDOStationInfo stationInfo = *(JDOStationInfo *)data.data;
-//                    JDOStationModel *sModel = [JDOStationModel new];
-//                    sModel.fid = [NSString stringWithUTF8String:stationInfo.stationId];
-//                    sModel.name = [NSString stringWithUTF8String:stationInfo.stationName];
-//                    sModel.gpsX = [NSNumber numberWithDouble:data.y];
-//                    sModel.gpsY = [NSNumber numberWithDouble:data.x];
-//                    sModel.attach = stationInfo.attach;
-//                    [stations addObject:sModel];
+    
+                //if (count<=4) { //4个站点以下的集群，点击后以列表的形式显示
+                    JDOStationInfo stationInfo = *(JDOStationInfo *)data.data;
+                    JDOStationModel *sModel = [JDOStationModel new];
+                    sModel.fid = [NSString stringWithUTF8String:stationInfo.stationId];
+                    sModel.name = [NSString stringWithUTF8String:stationInfo.stationName];
+                    sModel.gpsX = [NSNumber numberWithDouble:data.y];
+                    sModel.gpsY = [NSNumber numberWithDouble:data.x];
+                    sModel.attach = stationInfo.attach;
+                    [stations addObject:sModel];
 //                }else{
 //                    [stations removeAllObjects];
 //                }
-//            });
-//            
+            });
+    
 //            if(count>0){
-//                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(totalX / count, totalY / count);
-//                TBClusterAnnotation *annotation = [[TBClusterAnnotation alloc] initWithCoordinate:coordinate count:count];
-//                annotation.stations = stations;
-//                [clusteredAnnotations addObject:annotation];
+                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(totalX / 1, totalY / 1);
+                TBClusterAnnotation *annotation = [[TBClusterAnnotation alloc] initWithCoordinate:coordinate count:1];
+                annotation.stations = stations;
+                [clusteredAnnotations addObject:annotation];
 //            }
-//            
+    
 //        }
 //    }
-//    
-//    return [NSArray arrayWithArray:clusteredAnnotations];
-//}
+
+    return [NSArray arrayWithArray:clusteredAnnotations];
+}
 //
 //// 地图平移时，瓦片切分会变动。。不知道是什么原因，把直角坐标替换为经纬度坐标划分区域不会有该问题。。方法见上
 //- (NSArray *)clusteredAnnotationsWithinMapRect:(BMKMapRect)rect withZoomScale:(double)zoomScale

@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YTBus/JDORealTimeController.mm"
-            timestampString = "483701563.928065"
+            filePath = "YTBus/JDOStationMapController.mm"
+            timestampString = "483800307.286219"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
+            landmarkName = "-mapView:viewForAnnotation:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YTBus/JDORealTimeController.mm"
-            timestampString = "483709710.531548"
+            filePath = "YTBus/JDOStationMapController.mm"
+            timestampString = "483807442.787605"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "525"
+            endingLineNumber = "525"
+            landmarkName = "-getSelectedStationLineWithIdx:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,29 +42,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YTBus/JDOStationController.m"
-            timestampString = "483708406.938448"
+            timestampString = "483804036.299224"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YTBus/JDOStationController.m"
-            timestampString = "483708392.629085"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "-performSegueWithIdentifier:sender:"
-            landmarkType = "5">
+            scope = "0"
+            stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

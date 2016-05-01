@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "TBQuadTree.h"
-//#import "BMapKit.h"
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
 @interface TBCoordinateQuadTree : NSObject
 
 @property (assign, nonatomic) TBQuadTreeNode* root;
-//@property (strong, nonatomic) BMKMapView *mapView;
+@property (strong, nonatomic) BMKMapView *mapView;
 
 - (void)buildTree:(NSArray *)stations;
-//- (NSArray *)clusteredAnnotationsWithinMapRect:(BMKMapRect)rect withZoomScale:(double)zoomScale;
-//- (NSArray *)clusteredAnnotationsWithinMapView:(BMKMapView *)mapView;
+- (NSArray *)clusteredAnnotationsWithinMapRect:(BMKMapRect)rect withZoomScale:(double)zoomScale;
+- (NSArray *)clusteredAnnotationsWithinMapView:(BMKMapView *)mapView;
 
 @end

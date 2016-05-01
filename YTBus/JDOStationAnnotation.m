@@ -12,8 +12,8 @@
 
 - (NSUInteger)hash
 {
-//    NSString *toHash = [NSString stringWithFormat:@"%.5F%.5F", self.coordinate.latitude, self.coordinate.longitude];
-//    return [toHash hash];
+    NSString *toHash = [NSString stringWithFormat:@"%.5F%.5F", self.coordinate.latitude, self.coordinate.longitude];
+    return [toHash hash];
     return 0;
 }
 

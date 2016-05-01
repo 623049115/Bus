@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BMapKit.h"
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
+#import <BaiduMapAPI_Search/BMKRouteSearchType.h>
+#import <BaiduMapAPI_Location/BMKLocationComponent.h>
 
 @interface JDORouteMapController : UIViewController
 

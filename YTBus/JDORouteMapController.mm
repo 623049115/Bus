@@ -58,7 +58,15 @@
     
     CLLocationDegrees longitudeDelta = fabs(_route.starting.location.longitude - _route.terminal.location.longitude);
     CLLocationDegrees latitudeDelta = fabs(_route.starting.location.latitude - _route.terminal.location.latitude);
-    BMKCoordinateRegion mapRegion = [mapView regionThatFits:BMKCoordinateRegionMake(center,BMKCoordinateSpanMake(latitudeDelta,longitudeDelta))];
+    BMKCoordinateSpan span;
+    span.latitudeDelta = latitudeDelta;
+    span.longitudeDelta = longitudeDelta;
+    
+    BMKCoordinateRegion region;
+    region.center = center;
+    region.span = span;
+    
+    BMKCoordinateRegion mapRegion = [mapView regionThatFits:region];
     [mapView setRegion:mapRegion animated:false];
     
     

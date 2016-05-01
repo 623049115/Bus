@@ -82,5 +82,25 @@
 		<key>end</key>
 		<string>小新星英语学校 </string>
 	</dict>
+	<dict>
+		<key>routeId</key>
+		<string>B100</string>
+		<key>routeName</key>
+		<string>B100路</string>
+		<key>start</key>
+		<string>夷陵客运站</string>
+		<key>end</key>
+		<string>夷陵广场</string>
+	</dict>
+	<dict>
+		<key>routeId</key>
+		<string>B63</string>
+		<key>routeName</key>
+		<string>B63路</string>
+		<key>start</key>
+		<string>梅龙镇</string>
+		<key>end</key>
+		<string>姜家湾</string>
+	</dict>
 </array>
 </plist>

@@ -100,14 +100,17 @@ bool TBQuadTreeNodeInsertData(TBQuadTreeNode* node, TBQuadTreeNodeData data)
 
 void TBQuadTreeGatherDataInRange(TBQuadTreeNode* node, TBBoundingBox range, TBDataReturnBlock block)
 {
-    if (!TBBoundingBoxIntersectsBoundingBox(node->boundingBox, range)) {
+//    if (!TBBoundingBoxIntersectsBoundingBox(node->boundingBox, range)) {
+//        return;
+//    }
+    if (!node) {
         return;
     }
-
+    
     for (int i = 0; i < node->count; i++) {
-        if (TBBoundingBoxContainsData(range, node->points[i])) {
+//        if (TBBoundingBoxContainsData(range, node->points[i])) {
             block(node->points[i]);
-        }
+//        }
     }
 
     if (node->northWest == NULL) {

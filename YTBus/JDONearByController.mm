@@ -107,7 +107,7 @@
     noDataLabel.backgroundColor = [UIColor clearColor];
     noDataLabel.font = [UIFont systemFontOfSize:15];
     noDataLabel.textColor = [UIColor colorWithHex:@"5f5e59"];
-    NSString *originalText = @"          “烟台公交”仅覆盖烟台市辖区范围内的公交数据，您的位置附近没有找到相关信息。若您在烟台市区，请移动一段距离后重试，或在“更多->系统设置->附近站点半径范围”中增加查询范围。";
+    NSString *originalText = @"          “掌上公交”仅覆盖掌上市辖区范围内的公交数据，您的位置附近没有找到相关信息。若您在掌上市区，请移动一段距离后重试，或在“更多->系统设置->附近站点半径范围”中增加查询范围。";
     [self setLabel:noDataLabel text:originalText lineSpacing:2];
     noDataLabel.numberOfLines = 5;
     noDataLabel.hidden = true;
@@ -181,7 +181,7 @@
 //        [self.tableView reloadData];
 //        self.navigationItem.rightBarButtonItem.enabled = false;
 //        
-//        NSString *originalText = @"          您尚未允许“烟台公交”使用定位服务，请按以下顺序操作以开启定位:设置->隐私->定位服务->烟台公交->选择“使用应用程序期间”。";;
+//        NSString *originalText = @"          您尚未允许“掌上公交”使用定位服务，请按以下顺序操作以开启定位:设置->隐私->定位服务->掌上公交->选择“使用应用程序期间”。";;
 //        [self setLabel:hintLabel text:originalText lineSpacing:4];
 //        hintLabel.textColor = [UIColor colorWithHex:@"8f8e89"];
 //        hintImage.image = [UIImage imageNamed:@"不允许使用定位"];
@@ -351,7 +351,7 @@
 //        return NSOrderedDescending;
 //    }];
 //    
-//    // 测试超出烟台范围无公交站点的情况
+//    // 测试超出掌上范围无公交站点的情况
 ////    [_nearbyStations removeAllObjects];
 //    
 //    // 将同一线路的上下行两个方向分别离当前最近的站点合并成一个数组，距离近的在前，保存在busLine的nearbyStation中

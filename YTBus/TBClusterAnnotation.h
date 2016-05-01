@@ -7,16 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-//#import "BMKAnnotation.h"
+#import <BaiduMapAPI_Map/BMKMapComponent.h>
 
-@interface TBClusterAnnotation : NSObject
+@interface TBClusterAnnotation : NSObject <BMKAnnotation>
 
-//@property (assign, nonatomic) CLLocationCoordinate2D coordinate;
+@property (assign, nonatomic) CLLocationCoordinate2D coordinate;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *subtitle;
 @property (assign, nonatomic) NSInteger count;
 @property (strong, nonatomic) NSMutableArray *stations;
 
-//- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate count:(NSInteger)count;
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate count:(NSInteger)count;
 
 @end

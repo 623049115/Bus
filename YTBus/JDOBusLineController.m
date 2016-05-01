@@ -213,7 +213,7 @@
         JDORealTimeController *rt = segue.destinationViewController;
         JDOBusLine *busLine;
         if (selectedIndexPath.section == 0 && _filterAllLines.count>0) {
-            busLine = _filterFavorLines[selectedIndexPath.row];
+            busLine = _filterAllLines[selectedIndexPath.row];
         }else{
             busLine = _allLines[selectedIndexPath.row];
         }
