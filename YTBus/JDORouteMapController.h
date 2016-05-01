@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "BMapKit.h"
+#import "BMapKit.h"
 
 @interface JDORouteMapController : UIViewController
 
-//@property (nonatomic,strong) BMKTransitRouteLine *route;
+@property (nonatomic,strong) BMKTransitRouteLine *route;
 @property (nonatomic,strong) NSString *lineTitle;
 
 @end
