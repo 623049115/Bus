@@ -1020,9 +1020,9 @@
 	</dict>
 	<dict>
 		<key>routeId</key>
-		<string>B38</string>
+		<string>38</string>
 		<key>routeName</key>
-		<string>B38路</string>
+		<string>38路</string>
 		<key>startTime</key>
 		<string>6:30</string>
 		<key>endTime</key>

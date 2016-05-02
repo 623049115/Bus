@@ -53,7 +53,7 @@
         self.navigationController.navigationBar.translucent = NO;
     }
     _mapView.delegate = self;
-    _mapView.zoomLevel = 14;
+    _mapView.zoomLevel = 13;
 	_buslinesearch = [[BMKBusLineSearch alloc]init];
 	_buslinesearch.delegate = self;
     _poisearch = [[BMKPoiSearch alloc]init];
@@ -71,6 +71,7 @@
     _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     _buslinesearch.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
     [self onClickBusLineSearch];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -305,7 +306,7 @@
         }
         NSString* strKey = ((BMKPoiInfo*) [_busPoiArray objectAtIndex:currentIndex]).uid;
         BMKBusLineSearchOption *buslineSearchOption = [[BMKBusLineSearchOption alloc]init];
-        buslineSearchOption.city= _cityText.text;
+        buslineSearchOption.city= @"宜昌市";
         buslineSearchOption.busLineUid= strKey;
         BOOL flag = [_buslinesearch busLineSearch:buslineSearchOption];
         if(flag)

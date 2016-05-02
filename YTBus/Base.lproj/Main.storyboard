@@ -1096,6 +1096,10 @@
                                 <rect key="frame" x="10" y="309" width="300" height="196"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="站点-底部背景.png" id="ixS-sN-vQ9">
+                                        <rect key="frame" x="0.0" y="-2" width="300" height="200"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择站点" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" adjustsLetterSpacingToFitWidth="YES" id="oQi-FC-YNG">
                                         <rect key="frame" x="15" y="11" width="218" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1252,6 +1256,7 @@
         <image name="正在刷新.png" width="87" height="21"/>
         <image name="矩形上" width="320" height="171"/>
         <image name="矩形按钮" width="270" height="35"/>
+        <image name="站点-底部背景.png" width="300" height="199"/>
         <image name="站点箭头" width="12" height="12"/>
         <image name="箭头" width="8" height="16"/>
         <image name="纠错-对勾.png" width="16" height="16"/>

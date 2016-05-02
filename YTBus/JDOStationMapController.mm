@@ -310,13 +310,13 @@ static const void *LabelKey = &LabelKey;
 }
 
 #pragma mark - BMKMapViewDelegate
-- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
-{
-    [_queryQueue addOperationWithBlock:^{
-        self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:mapView];
-        [self updateMapViewAnnotationsWithAnnotations:self.annotations];
-    }];
-}
+//- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+//{
+//    [_queryQueue addOperationWithBlock:^{
+//        self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:mapView];
+//        [self updateMapViewAnnotationsWithAnnotations:self.annotations];
+//    }];
+//}
 
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation
 {
@@ -569,8 +569,10 @@ static const void *LabelKey = &LabelKey;
     _stations = [NSMutableArray arrayWithArray:stationArray];
     [self.coordinateQuadTree buildTree:_stations];
     
-    _mapView.centerCoordinate = CLLocationCoordinate2DMake(30.6976020000,111.2929710000);
-    _mapView.zoomLevel = 13;
+    self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:_mapView];
+    [self updateMapViewAnnotationsWithAnnotations:self.annotations];
+    
+    
 }
 
 //搜索公交站点

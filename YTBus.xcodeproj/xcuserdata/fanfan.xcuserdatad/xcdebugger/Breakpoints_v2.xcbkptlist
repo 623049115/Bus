@@ -67,14 +67,46 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "YTBus/BusLineSearchViewController.mm"
-            timestampString = "483874125.936412"
+            filePath = "YTBus/JDOStationMapController.mm"
+            timestampString = "483876998.816448"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
-            landmarkName = "-onClickNextSearch"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
+            landmarkName = "-jdoStationControllerDidSelectedStation:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[JDOStationMapController jdoStationControllerDidSelectedStation:]"
+                  moduleName = "YTBus"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fanfan/Desktop/pro/YTBus/JDOStationMapController.mm"
+                  timestampString = "483877623.781074"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "496"
+                  endingLineNumber = "496"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__66-[JDOStationMapController jdoStationControllerDidSelectedStation:]_block_invoke"
+                  moduleName = "YTBus"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fanfan/Desktop/pro/YTBus/JDOStationMapController.mm"
+                  timestampString = "483877623.781247"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "496"
+                  endingLineNumber = "496"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
