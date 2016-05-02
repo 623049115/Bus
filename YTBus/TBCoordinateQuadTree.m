@@ -189,12 +189,13 @@ TBQuadTreeNodeData TBDataFromModel(NSDictionary *station)
 //                }
             });
     
-//            if(count>0){
-                CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(totalX / 1, totalY / 1);
-                TBClusterAnnotation *annotation = [[TBClusterAnnotation alloc] initWithCoordinate:coordinate count:1];
-                annotation.stations = stations;
-                [clusteredAnnotations addObject:annotation];
-//            }
+    for (int i = 0; i < stations.count; i++) {
+        CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(totalX / 1, totalY / 1);
+        TBClusterAnnotation *annotation = [[TBClusterAnnotation alloc] initWithCoordinate:coordinate count:1];
+        annotation.stations = [NSMutableArray arrayWithArray:@[stations[i]]];
+        [clusteredAnnotations addObject:annotation];
+    }
+    
     
 //        }
 //    }

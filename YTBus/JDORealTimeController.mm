@@ -11,7 +11,6 @@
 #import "JDOBusLineDetail.h"
 #import "JDOStationModel.h"
 #import "JDODatabase.h"
-#import "JDORealTimeMapController.h"
 #import "JDOConstants.h"
 #import "JSONKit.h"
 #import "JDOBusModel.h"
@@ -228,7 +227,7 @@
     [super viewDidLoad];
     
     self.navigationItem.title = _busLine.lineName;
-    self.navigationItem.rightBarButtonItem.enabled = false;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     isLoadFinised = false;
     isMenuHidden = true;
     _isInit = true;
@@ -1100,28 +1099,11 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"toRealtimeMap"]) {
-        JDORealTimeMapController *rt = segue.destinationViewController;
-        rt.stations = _stations;
-        JDOStationModel *startStation;
-        if(selectedStartStation){
-            startStation = selectedStartStation;
-        }else if(_busLine.nearbyStationPair.count>0 && _busLine.nearbyStationPair[_busLine.showingIndex]!=[NSNull null]) {
-            startStation = _busLine.nearbyStationPair[_busLine.showingIndex];
-        }else{
-            return;
-        }
-        startStation.start = true;
+        BusLineSearchViewController *busLineSearchVC = segue.destinationViewController;
+        busLineSearchVC.lineId = self.busLine.lineId;
+        busLineSearchVC.direction = _direction;
         
-        rt.stationId = startStation.fid;
-        rt.lineId = _busLine.lineId;
-        JDOBusLineDetail *lineDetail = _busLine.lineDetailPair[_busLine.showingIndex];
-        rt.lineStatus = [lineDetail.direction isEqualToString:@"下行"]?@"1":@"2";
-        rt.attach = lineDetail.attach;
         
-        // 将当前车辆实时位置数据传递到地图中，避免地图界面第一次获取数据时间较长时没有车辆信息
-        if (_realBusList && _realBusList.count>0) {
-            rt.realBusList = [NSMutableArray arrayWithArray:_realBusList];
-        }
     }else if([segue.identifier isEqualToString:@"showStationDetail"]){
         JDOStationMapController *vc = (JDOStationMapController *)segue.destinationViewController;
         vc.selectedStation = (JDOStationModel *)sender;

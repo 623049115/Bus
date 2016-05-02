@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JDOBusLine.h"
+#import "BusLineSearchViewController.h"
 
 @class JDORealTimeCell;
 

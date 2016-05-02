@@ -14,6 +14,8 @@
 #import "JDOMainTabController.h"
 #import "iVersion.h"
 #import "AppDelegate.h"
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
 
 typedef enum{
     JDOSettingTypeSystem = 0,
@@ -128,35 +130,52 @@ typedef enum{
     [self presentPopupViewController:advController animationType:MJPopupViewAnimationFade];
 }
 
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    if(indexPath.row == JDOSettingTypeShare){
-//        // TODO 修改微博的重定向url
-//        NSString *content = @"我正在使用“掌上公交”查询公交车的实时位置,你也来试试吧!";
-//        id<ISSContent> publishContent = [ShareSDK content:content defaultContent:nil image:[ShareSDK jpegImageWithImage:[UIImage imageNamed:@"分享80"] quality:1.0] title:@"“掌上公交”上线啦！等车不再捉急，到点准时来接你。" url:Redirect_Url description:content mediaType:SSPublishContentMediaTypeNews];
-//        
-//        //QQ使用title和content(大概26个字以内)，但能显示字数更少。
-//        [publishContent addQQUnitWithType:INHERIT_VALUE content:content title:@"“掌上公交”上线啦！" url:INHERIT_VALUE image:INHERIT_VALUE];
-//        [publishContent addQQSpaceUnitWithTitle:@"“掌上公交”上线啦！" url:INHERIT_VALUE site:@"掌上公交" fromUrl:Redirect_Url comment:nil summary:content image:INHERIT_VALUE type:INHERIT_VALUE playUrl:INHERIT_VALUE nswb:INHERIT_VALUE];
-//        
-//        id<ISSQZoneApp> app =(id<ISSQZoneApp>)[ShareSDK getClientWithType:ShareTypeQQSpace];
-//        NSObject *qZone;
-//        if (app.isClientInstalled) {
-//            qZone = SHARE_TYPE_NUMBER(ShareTypeQQSpace);
-//        }else{
-//            qZone = [self getShareItem:ShareTypeQQSpace content:content];
-//        }
-//        
-//        NSArray *shareList = [ShareSDK customShareListWithType:SHARE_TYPE_NUMBER(ShareTypeWeixiSession),SHARE_TYPE_NUMBER(ShareTypeWeixiTimeline),SHARE_TYPE_NUMBER(ShareTypeQQ),qZone,[self getShareItem:ShareTypeSinaWeibo content:content],[self getShareItem:ShareTypeRenren content:content],nil];
-//        
-//        [ShareSDK showShareActionSheet:nil shareList:shareList content:publishContent statusBarTips:NO authOptions:nil shareOptions:nil result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-//            if (state == SSResponseStateSuccess){
-//                NSLog(@"分享成功");
-//            }else if (state == SSResponseStateFail){
-//                [JDOUtils showHUDText:[NSString stringWithFormat:@"分享失败,错误码:%ld",(long)[error errorCode]] inView:self.view];
-//            }
-//        }];
-//    }
-//}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(indexPath.row == JDOSettingTypeShare){
+        //NSArray* imageArray = @[[UIImage imageNamed:@"shareImg.png"]];
+        //(注意：图片必须要在Xcode左边目录里面，名称必须要传正确，如果要分享网络图片，可以这样传iamge参数 images:@[@"http://mob.com/Assets/images/logo.png?v=20150320"]）
+//        if (imageArray) {
+        
+            NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+            [shareParams SSDKSetupShareParamsByText:@"我正在使用 “掌上公交”。"
+                                             images:nil
+                                                url:nil
+                                              title:@"掌上公交"
+                                               type:SSDKContentTypeAuto];
+            //2、分享（可以弹出我们的分享菜单和编辑界面）
+            [ShareSDK showShareActionSheet:self.view //要显示菜单的视图, iPad版中此参数作为弹出菜单的参照视图，只有传这个才可以弹出我们的分享菜单，可以传分享的按钮对象或者自己创建小的view 对象，iPhone可以传nil不会影响
+                                     items:@[@(SSDKPlatformTypeSinaWeibo),@(SSDKPlatformSubTypeWechatTimeline),@(SSDKPlatformSubTypeQQFriend)]
+                               shareParams:shareParams
+                       onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+                           
+                           switch (state) {
+                               case SSDKResponseStateSuccess:
+                               {
+                                   UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                                       message:nil
+                                                                                      delegate:nil
+                                                                             cancelButtonTitle:@"确定"
+                                                                             otherButtonTitles:nil];
+                                   [alertView show];
+                                   break;
+                               }
+                               case SSDKResponseStateFail:
+                               {
+                                   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                                   message:[NSString stringWithFormat:@"%@",error]
+                                                                                  delegate:nil
+                                                                         cancelButtonTitle:@"OK"
+                                                                         otherButtonTitles:nil, nil];
+                                   [alert show];
+                                   break;
+                               }
+                               default:
+                                   break;
+                           }
+                       }  
+             ];}
+    //}
+}
 
 //- (id<ISSShareActionSheetItem>) getShareItem:(ShareType) type content:(NSString *)content{
 //    return [ShareSDK shareActionSheetItemWithTitle:[ShareSDK getClientNameWithType:type] icon:[ShareSDK getClientIconWithType:type] clickHandler:^{

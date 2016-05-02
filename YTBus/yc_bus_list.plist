@@ -102,5 +102,15 @@
 		<key>end</key>
 		<string>姜家湾</string>
 	</dict>
+	<dict>
+		<key>routeId</key>
+		<string>B16</string>
+		<key>routeName</key>
+		<string>B16路</string>
+		<key>start</key>
+		<string>渭河二路</string>
+		<key>end</key>
+		<string>电脑</string>
+	</dict>
 </array>
 </plist>

@@ -17,6 +17,16 @@
 #import "IQKeyboardManager.h"
 
 // ShareSDK
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+//腾讯开放平台（对应QQ和QQ空间）SDK头文件
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+//微信SDK头文件
+#import "WXApi.h"
+//新浪微博SDK头文件
+#import "WeiboSDK.h"
+//新浪微博SDK需要在项目Build Settings中的Other Linker Flags添加"-ObjC"
 
 
 #import "JDOStartupController.h"
@@ -66,6 +76,9 @@
     // 全局样式定义
     [self initAppearance];
     
+    //注册ShareSDK分享
+    [self registerShareSDK];
+    
     // 使用LaunchImage作为背景占位图，如果从友盟检测到的最小允许版本高于当前版本，则不进入storyboard，直接退出应用或进入appstore下载
     controller = [[JDOStartupController alloc] init];
     if (Screen_Height > 480) {
@@ -89,6 +102,7 @@
     
     return YES;
 }
+
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
 //    return [ShareSDK handleOpenURL:url wxDelegate:self];
@@ -117,6 +131,58 @@
     if (!ret) {
         NSLog(@"manager start failed!");
     }
+}
+
+- (void)registerShareSDK {
+    [ShareSDK registerApp:@"1250759a2f000"
+     
+          activePlatforms:@[
+                            @(SSDKPlatformTypeSinaWeibo),
+                            @(SSDKPlatformTypeWechat),
+                            @(SSDKPlatformTypeQQ)]
+                 onImport:^(SSDKPlatformType platformType)
+     {
+         switch (platformType)
+         {
+             case SSDKPlatformTypeWechat:
+                 [ShareSDKConnector connectWeChat:[WXApi class]];
+                 break;
+             case SSDKPlatformTypeQQ:
+                 [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
+                 break;
+             case SSDKPlatformTypeSinaWeibo:
+                 [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+                 break;
+             default:
+                 break;
+         }
+     }
+          onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
+     {
+         //echo ‘ibase=10;obase=16;1105371292′|bc
+         switch (platformType)
+         {
+             case SSDKPlatformTypeSinaWeibo:
+                 //设置新浪微博应用信息,其中authType设置为使用SSO＋Web形式授权
+                 [appInfo SSDKSetupSinaWeiboByAppKey:@"586973449"
+                                           appSecret:@"68b4d20efee0dc16323776bee32b09ab"
+                                         redirectUri:@"http://"
+                                            authType:SSDKAuthTypeBoth];
+                 break;
+             case SSDKPlatformTypeWechat:
+                 [appInfo SSDKSetupWeChatByAppId:@"wx5cee896952e89b10"
+                                       appSecret:@"61529db74dc75b9ef02760ddac080464"];
+                 break;
+             case SSDKPlatformTypeQQ:
+                 [appInfo SSDKSetupQQByAppId:@"1105371292"
+                                      appKey:@"YeBBfjCw2ixlT4lA"
+                                    authType:SSDKAuthTypeBoth];
+                 break;
+            default:
+                 break;
+         }
+     }];
+    
 
 }
 

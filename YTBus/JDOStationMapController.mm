@@ -119,21 +119,31 @@ static const void *LabelKey = &LabelKey;
     [self.busMonitor addTarget:self action:@selector(switchMonitor) forControlEvents:UIControlEventValueChanged];
     rightBtnIsSearch = true;
     
+
+    _mapView.zoomEnabled = true;
+    _mapView.zoomEnabledWithTap = true;
+    _mapView.scrollEnabled = true;
+    _mapView.rotateEnabled = true;
+    _mapView.overlookEnabled = false;
+    _mapView.showMapScaleBar = false;
+    _mapView.minZoomLevel = 12;
     _mapView.centerCoordinate = CLLocationCoordinate2DMake(30.6976020000,111.2929710000);
-    _mapView.zoomLevel = 13;
+    
+    _queryQueue = [[NSOperationQueue alloc] init];
+    _queryQueue.maxConcurrentOperationCount = 1;
     
     self.coordinateQuadTree = [[TBCoordinateQuadTree alloc] init];
     
     [self addCustomGestures];
-    
-    [self loadAllStations];
+    [_queryQueue addOperationWithBlock:^{
+        [self loadAllStations];
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    
     [self.mapView viewWillAppear];
     self.mapView.delegate = self;
-    [self customLocationAccuracyCircle];
-    _mapView.userTrackingMode = BMKUserTrackingModeNone;//设置定位模式
     //搜索公交站点
 //    self.poiSearch.delegate = self;
 //    [self searchBusPoint];
@@ -152,7 +162,7 @@ static const void *LabelKey = &LabelKey;
     [self.mapView viewWillDisappear];
     self.mapView.delegate = nil;
     
-    self.poiSearch.delegate = nil;
+//    self.poiSearch.delegate = nil;
     
 //    self.locationService.delegate = nil;
 //    [self stopLocation];
@@ -300,6 +310,14 @@ static const void *LabelKey = &LabelKey;
 }
 
 #pragma mark - BMKMapViewDelegate
+- (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    [_queryQueue addOperationWithBlock:^{
+        self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:mapView];
+        [self updateMapViewAnnotationsWithAnnotations:self.annotations];
+    }];
+}
+
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id<BMKAnnotation>)annotation
 {
     static NSString *const TBAnnotatioViewReuseID = @"TBAnnotatioViewReuseID";
@@ -326,10 +344,12 @@ static const void *LabelKey = &LabelKey;
 //        annotationView.paopaoView = [self createPaoPaoView:ca.stations];
 //    }
     
-    annotationView.annotation = annotation;
+//    annotationView.annotation = annotation;
     
     return annotationView;
 }
+
+
 
 //- (BMKActionPaopaoView *)createPaoPaoView:(NSArray *)paopaoLines{
 //    float tableHeight = paopaoLines.count*PaoPaoLineHeight;
@@ -402,22 +422,22 @@ static const void *LabelKey = &LabelKey;
 
 - (void)updateMapViewAnnotationsWithAnnotations:(NSArray *)annotations
 {
-    NSMutableSet *before = [NSMutableSet setWithArray:self.mapView.annotations];
-    //    [before removeObject:[self.mapView userLocation]];
-    NSSet *after = [NSSet setWithArray:annotations];
-    
-    NSMutableSet *toKeep = [NSMutableSet setWithSet:before];
-    [toKeep intersectSet:after];
-    
-    NSMutableSet *toAdd = [NSMutableSet setWithSet:after];
-    [toAdd minusSet:toKeep];
-    
-    NSMutableSet *toRemove = [NSMutableSet setWithSet:before];
-    [toRemove minusSet:after];
+//    NSMutableSet *before = [NSMutableSet setWithArray:self.mapView.annotations];
+//    NSSet *after = [NSSet setWithArray:annotations];
+//    
+//    NSMutableSet *toKeep = [NSMutableSet setWithSet:before];
+//    [toKeep intersectSet:after];
+//    
+//    NSMutableSet *toAdd = [NSMutableSet setWithSet:after];
+//    [toAdd minusSet:toKeep];
+//    
+//    NSMutableSet *toRemove = [NSMutableSet setWithSet:before];
+//    [toRemove minusSet:after];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.mapView addAnnotations:[toAdd allObjects]];
-        [self.mapView removeAnnotations:[toRemove allObjects]];
+//        [self.mapView addAnnotations:[toAdd allObjects]];
+//        [self.mapView removeAnnotations:[toRemove allObjects]];
+        [self.mapView addAnnotations:annotations];
     }];
 }
 
@@ -464,11 +484,7 @@ static const void *LabelKey = &LabelKey;
 //接收反向地理编码结果
 -(void) onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result: (BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error{
     if (error == BMK_SEARCH_NO_ERROR) {
-        //        if (result.poiList.count>0) {
-        //            searcher.titleLabel.text = [(BMKPoiInfo *)result.poiList[0] name];
-        //        }else{
         searcher.titleLabel.text = [[result.addressDetail.district stringByAppendingString:result.addressDetail.streetName] stringByAppendingString:result.addressDetail.streetNumber];
-        //        }
     }else{
         searcher.titleLabel.text = @"无法获取位置信息";
     }
@@ -552,10 +568,9 @@ static const void *LabelKey = &LabelKey;
     
     _stations = [NSMutableArray arrayWithArray:stationArray];
     [self.coordinateQuadTree buildTree:_stations];
-//    [_stations removeAllObjects];
     
-    self.annotations = [self.coordinateQuadTree clusteredAnnotationsWithinMapView:_mapView];
-    [self updateMapViewAnnotationsWithAnnotations:self.annotations];
+    _mapView.centerCoordinate = CLLocationCoordinate2DMake(30.6976020000,111.2929710000);
+    _mapView.zoomLevel = 13;
 }
 
 //搜索公交站点

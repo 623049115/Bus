@@ -4,6 +4,22 @@
 <array>
 	<dict>
 		<key>stationId</key>
+		<string>3</string>
+		<key>stationName</key>
+		<string>三峡大学图书馆</string>
+		<key>lat</key>
+		<real>30.728882</real>
+		<key>lon</key>
+		<real>111.319882</real>
+		<key>buses</key>
+		<array>
+			<string>B16</string>
+			<string>B34</string>
+			<string>B100</string>
+		</array>
+	</dict>
+	<dict>
+		<key>stationId</key>
 		<string>1</string>
 		<key>stationName</key>
 		<string>平云一路</string>
@@ -11,6 +27,69 @@
 		<real>30.719402</real>
 		<key>lon</key>
 		<real>111.317889</real>
+		<key>buses</key>
+		<array>
+			<string>B68</string>
+			<string>B100</string>
+			<string>B63</string>
+		</array>
+	</dict>
+	<dict>
+		<key>stationId</key>
+		<string>2</string>
+		<key>stationName</key>
+		<string>三峡大学接待中心</string>
+		<key>lat</key>
+		<real>30.733116</real>
+		<key>lon</key>
+		<real>111.321592</real>
+		<key>buses</key>
+		<array>
+			<string>B16</string>
+			<string>B100</string>
+		</array>
+	</dict>
+	<dict>
+		<key>stationId</key>
+		<string>4</string>
+		<key>stationName</key>
+		<string>三峡大学南苑学生公寓</string>
+		<key>lat</key>
+		<real>30.721888</real>
+		<key>lon</key>
+		<real>111.318453</real>
+		<key>buses</key>
+		<array>
+			<string>B16</string>
+			<string>B34</string>
+			<string>B100</string>
+		</array>
+	</dict>
+	<dict>
+		<key>stationId</key>
+		<string>5</string>
+		<key>stationName</key>
+		<string>夷陵广场站</string>
+		<key>lat</key>
+		<real>30.776498</real>
+		<key>lon</key>
+		<real>111.335338</real>
+		<key>buses</key>
+		<array>
+			<string>B68</string>
+			<string>B100</string>
+			<string>B63</string>
+		</array>
+	</dict>
+	<dict>
+		<key>stationId</key>
+		<string>5</string>
+		<key>stationName</key>
+		<string>夷陵广场站</string>
+		<key>lat</key>
+		<real>30.708435</real>
+		<key>lon</key>
+		<real>111.301123</real>
 		<key>buses</key>
 		<array>
 			<string>B68</string>

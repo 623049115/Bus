@@ -646,12 +646,12 @@
         <!--地图-->
         <scene sceneID="cVe-QY-7QX">
             <objects>
-                <viewController title="地图" hidesBottomBarWhenPushed="YES" id="bBZ-w8-kZ8" customClass="JDORealTimeMapController" sceneMemberID="viewController">
+                <viewController title="地图" hidesBottomBarWhenPushed="YES" id="bBZ-w8-kZ8" customClass="BusLineSearchViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dPg-bx-y5H">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" id="WvL-TG-4uU">
+                            <view contentMode="scaleToFill" id="WvL-TG-4uU" customClass="BMKMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -664,6 +664,9 @@
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="_mapView" destination="WvL-TG-4uU" id="geI-vp-BPP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXr-Br-Vhv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1093,10 +1096,6 @@
                                 <rect key="frame" x="10" y="309" width="300" height="196"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="站点-底部背景.png" id="H6L-o9-Idb">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="200"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请选择站点" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" adjustsLetterSpacingToFitWidth="YES" id="oQi-FC-YNG">
                                         <rect key="frame" x="15" y="11" width="218" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1253,7 +1252,6 @@
         <image name="正在刷新.png" width="87" height="21"/>
         <image name="矩形上" width="320" height="171"/>
         <image name="矩形按钮" width="270" height="35"/>
-        <image name="站点-底部背景.png" width="300" height="199"/>
         <image name="站点箭头" width="12" height="12"/>
         <image name="箭头" width="8" height="16"/>
         <image name="纠错-对勾.png" width="16" height="16"/>
@@ -1263,7 +1261,7 @@
         <image name="首" width="15" height="15"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GdE-z5-Rfk"/>
+        <segue reference="HE1-G9-ZEi"/>
         <segue reference="XU4-GO-KEV"/>
     </inferredMetricsTieBreakers>
 </document>
